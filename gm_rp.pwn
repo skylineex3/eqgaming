@@ -117,7 +117,7 @@ new Text:LSNews[2], NewsTimer, Text:ForGame, Text:VehicleInfo[MAX_PLAYERS];
 
 main()
 {
-	//...
+	printf("\n# Projekt eQualityGaming RolePlay załadowano. #\n");
 }
 
 stock GetNearestPlayer(playerid, Float:dist)
