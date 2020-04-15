@@ -1,1 +1,1 @@
-# eqgaming
+# eQuality Gaming - RolePlay SA-MP
