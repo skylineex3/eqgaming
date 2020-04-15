@@ -1,0 +1,53 @@
+stock ClearPlayerData(playerid)
+{
+    PlayerData[playerid][char_edit_object] = -1;
+	PlayerData[playerid][char_editing] = false;
+	PlayerData[playerid][char_edit_stage] = STAGE_OBJECT_NONE;
+	PlayerData[playerid][char_admin_level] = 0;
+	PlayerData[playerid][char_last_pos][0] = 0.0;
+	PlayerData[playerid][char_last_pos][1] = 0.0;
+	PlayerData[playerid][char_last_pos][2] = 0.0;
+	PlayerData[playerid][char_last_pos][3] = 0.0;
+	PlayerData[playerid][char_spectate_id] = -1;
+	PlayerData[playerid][char_interior] = 0;
+	PlayerData[playerid][char_virtual_world] = 0;
+	PlayerData[playerid][char_health] = 100.0;
+	PlayerData[playerid][char_cash] = 0;
+	PlayerData[playerid][char_bank] = 0;
+	PlayerData[playerid][char_skin] = 1;
+	PlayerData[playerid][char_strength] = 3000;
+	PlayerData[playerid][char_bw] = 0;
+	PlayerData[playerid][char_sex] = SEX_MALE;
+	PlayerData[playerid][char_last_pm] = -1;
+	PlayerData[playerid][char_premium] = 0;
+	PlayerData[playerid][char_vehicle_info_timer] = 0;
+	PlayerData[playerid][char_block_ooc] = 0;
+	PlayerData[playerid][char_online] = 0;
+	PlayerData[playerid][char_score] = 0;
+	PlayerData[playerid][char_last_damaged_weapon] = -1;
+	PlayerData[playerid][char_body_part_damaged][0] = 0;
+	PlayerData[playerid][char_body_part_damaged][1] = 0;
+	PlayerData[playerid][char_body_part_damaged][2] = 0;
+	PlayerData[playerid][char_body_part_damaged][3] = 0;
+	PlayerData[playerid][char_body_part_damaged][4] = 0;
+	PlayerData[playerid][char_body_part_damaged][5] = 0;
+	PlayerData[playerid][char_body_part_damaged][6] = 0;
+	PlayerData[playerid][char_stage] = STAGE_ZONE_NONE;
+	PlayerData[playerid][char_debt] = 0;
+	PlayerData[playerid][char_bank_number] = 0;
+	PlayerData[playerid][char_inside_doors] = 0;
+	PlayerData[playerid][char_offer_id] = -1;
+	PlayerData[playerid][char_offer_value] = 0;
+	PlayerData[playerid][char_weight] = 0;
+	PlayerData[playerid][char_height] = 0;
+	PlayerData[playerid][char_age] = 0;
+	PlayerData[playerid][char_guid] = -1;
+	PlayerData[playerid][char_lastonline] = 0;
+	PlayerData[playerid][char_ingame] = 0;
+	FreeID[playerid] = -1;
+	PlayerData[playerid][char_logged] = false;
+
+	UpdateDynamic3DTextLabelText(Text3D:PlayerData[playerid][char_desc_text], 0xC2A2DAFF, " ");
+	UpdateDynamic3DTextLabelText(Text3D:PlayerData[playerid][char_name_tag], 0xFFFFFF80, " ");
+	return 1;
+}
