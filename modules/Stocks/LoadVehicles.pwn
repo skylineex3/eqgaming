@@ -21,6 +21,6 @@ stock LoadVehicles()
 
 	mysql_free_result();
 
-	printf("[load][vehicles] Za³adowano %d pojazdów.", i);
+	printf("[load][vehicles] Zaï¿½adowano %d pojazdï¿½w.", i);
 	return 1;
 }

@@ -7,14 +7,14 @@
 	((newkeys & (%0)) == (%0))
 
 #undef MAX_VEHICLES
-#define MAX_VEHICLES                    50000
+#define MAX_VEHICLES                    5000
 
 #undef MAX_OBJECTS
 #define MAX_OBJECTS                     50000
 
-#define MAX_ZONES                       5000
+#define MAX_ZONES                       1000
 
-#define MAX_DOORS                       25000
+#define MAX_DOORS                       5000
 
 //#define APIKEY                        "99a54aed0e77ca64bac2d3ddc8c1558909252cf467ed2e0570993617172aef89"
 

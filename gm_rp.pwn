@@ -196,7 +196,7 @@ stock GetNearestVehicle(playerid, Float:distance)
 		Float:zZ,
 		retElement = -1
 	;
-    for(new i = 1; i < MAX_VEHICLES; i++)
+    for(new i = 0; i < MAX_VEHICLES; i++)
     {
         GetVehiclePos(i, xX, yY, zZ);
         new Float:odist = GetPlayerDistanceFromPoint(playerid, xX, yY, zZ);
