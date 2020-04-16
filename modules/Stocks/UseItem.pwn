@@ -2,17 +2,17 @@ stock UseItem(playerid, uid)
 {
 	if(Item[uid][Type] == 0)
 	{
-	    Tip(playerid, "Ten przedmiot nie posiada ¿adnej funkcji skryptowej.");
+	    Tip(playerid, "Ten przedmiot nie posiada ï¿½adnej funkcji skryptowej.");
 	}
     else if(Item[uid][Type] == 1)
 	{
-	    for(new i=1; i<MAX_ITEMS; i++)
+	    for(new i=0; i<MAX_ITEMS; i++)
     	{
     	    if(Item[i][Type] == Item[uid][Type] && Item[i][Owner] == PlayerData[playerid][char_uid])
     	    {
     			if(!Item[uid][Active] && Item[i][Active])
 				{
-  					Tip(playerid, "Mo¿esz mieæ tylko jedn¹ broñ aktywn¹.");
+  					Tip(playerid, "Moï¿½esz mieï¿½ tylko jednï¿½ broï¿½ aktywnï¿½.");
 	    			return 1;
 				}
 			}
@@ -86,7 +86,7 @@ stock UseItem(playerid, uid)
 	else if(Item[uid][Type] == 4)
 	{
 	    FreeID[playerid] = uid;
-	    ShowPlayerDialog(playerid, D_ITEM_DISC, DIALOG_STYLE_INPUT, "Tworzenie p³yty » Nazwa", "WprowadŸ nazwê p³yty aby przejœæ dalej (Bez 'P³yta CD:'):", "ZatwierdŸ", "Zamknij");
+	    ShowPlayerDialog(playerid, D_ITEM_DISC, DIALOG_STYLE_INPUT, "Tworzenie pï¿½yty ï¿½ Nazwa", "Wprowadï¿½ nazwï¿½ pï¿½yty aby przejï¿½ï¿½ dalej (Bez 'Pï¿½yta CD:'):", "Zatwierdï¿½", "Zamknij");
 	}
 	else if(Item[uid][Type] == 5)
 	{
@@ -97,7 +97,7 @@ stock UseItem(playerid, uid)
 		mysql_query(DB_Query);
 
 		new string[64];
-		format(string, sizeof(string), "spo¿ywa %s.", Item[uid][Name]);
+		format(string, sizeof(string), "spoï¿½ywa %s.", Item[uid][Name]);
 		cmd_me(playerid, string);
 
 		Item[uid][UID] = -1;

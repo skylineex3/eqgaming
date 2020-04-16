@@ -1,6 +1,6 @@
 /*
 
-Projekt: Forgame
+Projekt: eQualityGaming
 Wersja: v1.0(d)
 Data: 11/01/2020
 Autor: Sky
