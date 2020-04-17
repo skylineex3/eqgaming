@@ -844,17 +844,17 @@ CMD:area(playerid, cmdtext[])
 		{
 			new str[64], string[256], uid = GetPlayerZone(playerid);
 			FreeID[playerid] = uid;
-			string = "Ustawienia\tWartości";
+			string = "Ustawienia\tWarto�ci";
 
 			format(str, sizeof(str), "Strefa %s (UID: %d) (SampID: %d)", Zone[uid][z_name], Zone[uid][z_uid], Zone[uid][z_sampid]);
-			format(string, sizeof(string), "%s\nPrzejmij strefę", string);
-			if(IsPlayerAdmin(playerid) || PlayerData[playerid][char_admin_level] > 6) format(string, sizeof(string), "%s\n-------------------------\nWłaściciel:\t%d\nBudynek mieszkalny:\t%d$\nBudynek biznesowy:\t%d$\nMinimalny metraż:\t%dm2", string, Zone[uid][z_owner], Zone[uid][z_house_cost], Zone[uid][z_buis_cost], Zone[uid][z_size]);
+			format(string, sizeof(string), "%s\nPrzejmij stref�", string);
+			if(IsPlayerAdmin(playerid) || PlayerData[playerid][char_admin_level] > 6) format(string, sizeof(string), "%s\n-------------------------\nW�a�ciciel:\t%d\nBudynek mieszkalny:\t%d$\nBudynek biznesowy:\t%d$\nMinimalny metra�:\t%dm2", string, Zone[uid][z_owner], Zone[uid][z_house_cost], Zone[uid][z_buis_cost], Zone[uid][z_size]);
 
 			ShowPlayerDialog(playerid, D_AREA, DIALOG_STYLE_TABLIST_HEADERS, str, string, "Wybierz", "Anuluj");
 		}
 		else
 		{
-	    	Tip(playerid, "Nie znajdujesz się na żadnej strefie.");
+	    	Tip(playerid, "Nie znajdujesz si� na �adnej strefie.");
 		}
 	}
 	else
