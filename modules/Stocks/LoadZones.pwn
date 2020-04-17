@@ -10,13 +10,13 @@ stock LoadZones()
   	{
 		i++;
 
-   		sscanf(data, "p<|>dds[32]ffffdddd", Zone[i][z_uid], Zone[i][z_name], Zone[i][z_min][0], Zone[i][z_min][1], Zone[i][z_max][0], Zone[i][z_max][1], Zone[i][z_owner], Zone[i][z_house_cost], Zone[i][z_buis_cost], Zone[i][z_size]);
+   		sscanf(data, "p<|>ds[32]ffffdddd", Zone[i][z_uid], Zone[i][z_name], Zone[i][z_min][0], Zone[i][z_min][1], Zone[i][z_max][0], Zone[i][z_max][1], Zone[i][z_owner], Zone[i][z_house_cost], Zone[i][z_buis_cost], Zone[i][z_size]);
 
 		Zone[i][z_sampid] = GangZoneCreate(Zone[i][z_min][0], Zone[i][z_min][1], Zone[i][z_max][0], Zone[i][z_max][1]);
 	}
 
 	mysql_free_result();
 
-	printf("[load][zones] Za³adowano %d stref.", i);
+	printf("[load][zones] Zaï¿½adowano %d stref.", i);
 	return 1;
 }

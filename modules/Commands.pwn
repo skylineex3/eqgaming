@@ -2,14 +2,14 @@ CMD:news(playerid, cmdtext[])
 {
     if(PlayerData[playerid][char_bw] != 0)
 	{
-		Info(playerid, "Nie mo¿esz teraz skorzystaæ z tej komendy.");
+		Info(playerid, "Nie moï¿½esz teraz skorzystaï¿½ z tej komendy.");
 		return 1;
 	}
 
 	if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 1) return 0;
 
 	new czas, tresc[128];
-	if(sscanf(cmdtext, "is[128]", czas, tresc)) return Tip(playerid, "Tip: /news [czas] [treœæ]");
+	if(sscanf(cmdtext, "is[128]", czas, tresc)) return Tip(playerid, "Tip: /news [czas] [treï¿½ï¿½]");
 
 	if(czas == 0 && !strcmp(tresc, "0", true))
 	{
@@ -39,7 +39,7 @@ CMD:drzwi(playerid, cmdtext[])
 
 		    if(i != -1)
 		    {
-		        Tip(playerid, "Ta funkcja jest aktualnie niedostêpna.");
+		        Tip(playerid, "Ta funkcja jest aktualnie niedostï¿½pna.");
 			}
 			else
 			{
@@ -47,19 +47,19 @@ CMD:drzwi(playerid, cmdtext[])
 			    if(uid != 0)
 			    {
 			        if(Zone[uid][z_house_cost] != 0 && Zone[uid][z_buis_cost] != 0)
-			    		format(str, sizeof(str), "Stwórz nowy budynek (Dom: $%d/m2, min %dm2 | Biznes: $%d/m2, min %dm2)", Zone[uid][z_house_cost], Zone[uid][z_size], Zone[uid][z_buis_cost], Zone[uid][z_size]);
+			    		format(str, sizeof(str), "Stwï¿½rz nowy budynek (Dom: $%d/m2, min %dm2 | Biznes: $%d/m2, min %dm2)", Zone[uid][z_house_cost], Zone[uid][z_size], Zone[uid][z_buis_cost], Zone[uid][z_size]);
 					else if(Zone[uid][z_house_cost] == 0 && Zone[uid][z_buis_cost] != 0)
-					    format(str, sizeof(str), "Stwórz nowy budynek (Biznes: $%d/m2, min %dm2)", Zone[uid][z_buis_cost], Zone[uid][z_size]);
+					    format(str, sizeof(str), "Stwï¿½rz nowy budynek (Biznes: $%d/m2, min %dm2)", Zone[uid][z_buis_cost], Zone[uid][z_size]);
 					else if(Zone[uid][z_house_cost] != 0 && Zone[uid][z_buis_cost] == 0)
-					    format(str, sizeof(str), "Stwórz nowy budynek (Dom: $%d/m2, min %dm2)", Zone[uid][z_house_cost], Zone[uid][z_size]);
+					    format(str, sizeof(str), "Stwï¿½rz nowy budynek (Dom: $%d/m2, min %dm2)", Zone[uid][z_house_cost], Zone[uid][z_size]);
 					else if(Zone[uid][z_house_cost] == 0 && Zone[uid][z_buis_cost] == 0)
-					    format(str, sizeof(str), "Stwórz nowy budynek (Niemo¿liwe na tej strefie)");
+					    format(str, sizeof(str), "Stwï¿½rz nowy budynek (Niemoï¿½liwe na tej strefie)");
 				}
 				else
 				{
-				    format(str, sizeof(str), "Stwórz nowy budynek (Niemo¿liwe na tej strefie)");
+				    format(str, sizeof(str), "Stwï¿½rz nowy budynek (Niemoï¿½liwe na tej strefie)");
 				}
-				ShowPlayerDialog(playerid, D_DOORS, DIALOG_STYLE_LIST, "Tworzenie drzwi", str, "Stwórz", "Anuluj");
+				ShowPlayerDialog(playerid, D_DOORS, DIALOG_STYLE_LIST, "Tworzenie drzwi", str, "Stwï¿½rz", "Anuluj");
 			}
 		}
 		else
@@ -67,7 +67,7 @@ CMD:drzwi(playerid, cmdtext[])
 			if(!strcmp(type, "stworz", true))
 			{
 	    		new typee, name[24], doorid, Float:X, Float:Y, Float:Z, Float:A;
-	    		if(sscanf(next, "is[24]", typee, name)) return SendClientMessage(playerid, 0xCCCCCCFF, "Tip: /drzwi stworz [typ 0 - wejœcie | 1 - przejœcie] [nazwa]");
+	    		if(sscanf(next, "is[24]", typee, name)) return SendClientMessage(playerid, 0xCCCCCCFF, "Tip: /drzwi stworz [typ 0 - wejï¿½cie | 1 - przejï¿½cie] [nazwa]");
 
 				GetPlayerPos(playerid, X, Y, Z);
 				GetPlayerFacingAngle(playerid, A);
@@ -160,7 +160,7 @@ CMD:zamknij(playerid, cmdtext[])
 		if(Doors[i][Locked] == 1)
 		{
 			Doors[i][Locked] = 0;
- 			cmd_me(playerid, "otwiera drzwi u¿ywaj¹c klucza.");
+ 			cmd_me(playerid, "otwiera drzwi uï¿½ywajï¿½c klucza.");
 
  			ApplyAnimation(playerid,"INT_HOUSE", "wash_up", 4.1, 0, 0, 0, 0, 0, 1);
 		}
@@ -174,7 +174,7 @@ CMD:zamknij(playerid, cmdtext[])
 	}
 	else
 	{
-	    Tip(playerid, "Nie znaleziono ¿adnych drzwi w pobli¿u.");
+	    Tip(playerid, "Nie znaleziono ï¿½adnych drzwi w pobliï¿½u.");
 	}
 	return 1;
 }
@@ -182,7 +182,7 @@ CMD:zamknij(playerid, cmdtext[])
 CMD:crime(playerid, cmdtext[])
 {
 	new id, dzwiek;
-	if(sscanf(cmdtext, "ii", id, dzwiek)) return Tip(playerid, "Tip: /crime [id] [id dŸwiêku]");
+	if(sscanf(cmdtext, "ii", id, dzwiek)) return Tip(playerid, "Tip: /crime [id] [id dï¿½wiï¿½ku]");
 
 	PlayCrimeReportForPlayer(playerid, id, dzwiek);
 	return 1;
@@ -192,28 +192,28 @@ CMD:opis(playerid, params[])
 {
     if(PlayerData[playerid][char_bw] != 0)
 	{
-		Info(playerid, "Nie mo¿esz teraz skorzystaæ z tej komendy.");
+		Info(playerid, "Nie moï¿½esz teraz skorzystaï¿½ z tej komendy.");
 		return 1;
 	}
 
 	new desc[128], String[256];
 	if(sscanf(params, "s[128]", desc))
 	{
-	    Tip(playerid, "Tip: /opis [treœæ | usun - usuwa opis]");
+	    Tip(playerid, "Tip: /opis [treï¿½ï¿½ | usun - usuwa opis]");
 		return 1;
 	}
 	if(!strcmp(desc, "usun", true))
 	{
  		UpdateDynamic3DTextLabelText(Text3D:PlayerData[playerid][char_desc_text], 0xC2A2DAFF, " ");
-		Info(playerid, "Opis zosta³ pomyœlnie usuniêty.");
+		Info(playerid, "Opis zostaï¿½ pomyï¿½lnie usuniï¿½ty.");
 	    return 1;
 	}
 
-	if(strlen(desc) > 128 || strlen(desc) < 24) return Info(playerid, "Treœæ opisu powinna zawieraæ od 24 do 128 znaków.");
+	if(strlen(desc) > 128 || strlen(desc) < 24) return Info(playerid, "Treï¿½ï¿½ opisu powinna zawieraï¿½ od 24 do 128 znakï¿½w.");
  	EscapePL(desc);
 	new givenString[128];
 	format(givenString, sizeof(givenString), "%s", desc);
-	if(!CheckCharacters(givenString)) return Info(playerid, "Opis, który chcesz ustawiæ zawiera niedozwolone znaki.");
+	if(!CheckCharacters(givenString)) return Info(playerid, "Opis, ktï¿½ry chcesz ustawiï¿½ zawiera niedozwolone znaki.");
 
 	if(PlayerData[playerid][char_premium] > gettime())
 	{
@@ -222,7 +222,7 @@ CMD:opis(playerid, params[])
 	}
 
 	UpdateDynamic3DTextLabelText(Text3D:PlayerData[playerid][char_desc_text], 0xC2A2DAFF, WordWrap(givenString, 5));
-	format(String, 256, "Twój nowy opis to: {FFFFFF}%s", givenString);
+	format(String, 256, "Twï¿½j nowy opis to: {FFFFFF}%s", givenString);
 	Tip(playerid, String);
 
 	new str[144];
@@ -241,7 +241,7 @@ CMD:stats(playerid, cmdtext[])
 	else
 	{
 	    if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 3) return ShowPlayerStats(playerid, playerid);
-	    if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+	    if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
 
 		ShowPlayerStats(playerid, id);
 	}
@@ -252,14 +252,14 @@ CMD:w(playerid, params[])
 {
     if(PlayerData[playerid][char_block_ooc] != 0)
     {
-    	Info(playerid, "Posiadasz aktywn¹ blokadê czatów OOC.");
+    	Info(playerid, "Posiadasz aktywnï¿½ blokadï¿½ czatï¿½w OOC.");
      	return 0;
 	}
 
 	new id, text[128];
-	if(sscanf(params, "us[128]", id, text)) return Tip(playerid, "Tip: /w [id gracza] [treœæ]");
-	if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
-	if(PlayerData[id][char_block_ooc] != 0) return Tip(playerid, "Ten gracz posiada aktywn¹ blokadê czatów OOC, nie mo¿esz do niego napisaæ.");
+	if(sscanf(params, "us[128]", id, text)) return Tip(playerid, "Tip: /w [id gracza] [treï¿½ï¿½]");
+	if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
+	if(PlayerData[id][char_block_ooc] != 0) return Tip(playerid, "Ten gracz posiada aktywnï¿½ blokadï¿½ czatï¿½w OOC, nie moï¿½esz do niego napisaï¿½.");
 
 	new str[256];
 	format(str, sizeof(str), "(( %s(ID: %d): %s ))", PlayerName(playerid), playerid, text);
@@ -270,7 +270,7 @@ CMD:w(playerid, params[])
 
 	PlayerData[id][char_last_pm] = playerid;
 
-	format(str, sizeof(str), "%s » %s: %s", PlayerName(playerid), PlayerName(id), text);
+	format(str, sizeof(str), "%s ï¿½ %s: %s", PlayerName(playerid), PlayerName(id), text);
 	Log("priv", str);
 	return 1;
 }
@@ -282,15 +282,15 @@ CMD:re(playerid, cmdtext[])
 {
     if(PlayerData[playerid][char_block_ooc] != 0)
     {
-    	Info(playerid, "Posiadasz aktywn¹ blokadê czatów OOC.");
+    	Info(playerid, "Posiadasz aktywnï¿½ blokadï¿½ czatï¿½w OOC.");
      	return 0;
 	}
 
 	new text[128], id = PlayerData[playerid][char_last_pm];
-	if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /re [treœæ]");
-	if(id == -1) return Tip(playerid, "Nikt do Ciebie nie pisa³ od ostatniego logowania.");
-	if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
-	if(PlayerData[id][char_block_ooc] != 0) return Tip(playerid, "Ten gracz posiada aktywn¹ blokadê czatów OOC, nie mo¿esz do niego napisaæ.");
+	if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /re [treï¿½ï¿½]");
+	if(id == -1) return Tip(playerid, "Nikt do Ciebie nie pisaï¿½ od ostatniego logowania.");
+	if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
+	if(PlayerData[id][char_block_ooc] != 0) return Tip(playerid, "Ten gracz posiada aktywnï¿½ blokadï¿½ czatï¿½w OOC, nie moï¿½esz do niego napisaï¿½.");
 
 	new str[256];
 	format(str, sizeof(str), "(( %s(ID: %d): %s ))", PlayerName(playerid), playerid, text);
@@ -301,7 +301,7 @@ CMD:re(playerid, cmdtext[])
 
 	PlayerData[id][char_last_pm] = playerid;
 
-	format(str, sizeof(str), "%s » %s: %s", PlayerName(playerid), PlayerName(id), text);
+	format(str, sizeof(str), "%s ï¿½ %s: %s", PlayerName(playerid), PlayerName(id), text);
 	Log("priv", str);
 	return 1;
 }
@@ -311,12 +311,12 @@ CMD:id(playerid, cmdtext[])
 	new nick[64];
 	if(sscanf(cmdtext, "s[64]", nick))
 	{
-	    if(GetNearestPlayer(playerid, 20.0) == INVALID_PLAYER_ID) return Info(playerid, "W pobli¿u nie ma ¿adnych graczy.");
+	    if(GetNearestPlayer(playerid, 20.0) == INVALID_PLAYER_ID) return Info(playerid, "W pobliï¿½u nie ma ï¿½adnych graczy.");
 
 	    new id = GetNearestPlayer(playerid, 20.0);
 
 		new str[128];
- 		format(str, sizeof(str), "Najbli¿szy gracz to: %s(ID: %d)", PlayerName(id), id);
+ 		format(str, sizeof(str), "Najbliï¿½szy gracz to: %s(ID: %d)", PlayerName(id), id);
   		Tip(playerid, str);
 	}
 	else
@@ -324,7 +324,7 @@ CMD:id(playerid, cmdtext[])
 		new string[128];
 		string = "ID\tNick";
 		format(string, sizeof(string), "%s\n%d\t%s", string, GetPlayerID(nick), PlayerName(GetPlayerID(nick)));
-		if(GetPlayerID(nick) == INVALID_PLAYER_ID) format(string, sizeof(string), "ID\tNick\nNie znaleziono ¿adnych graczy.");
+		if(GetPlayerID(nick) == INVALID_PLAYER_ID) format(string, sizeof(string), "ID\tNick\nNie znaleziono ï¿½adnych graczy.");
 
 		ShowPlayerDialog(playerid, D_ID, DIALOG_STYLE_TABLIST_HEADERS, "Lista graczy", string, "PW", "Zamknij");
 	}
@@ -338,22 +338,22 @@ CMD:plac(playerid, cmdtext[])
 {
     if(PlayerData[playerid][char_bw] != 0)
 	{
-		Info(playerid, "Nie mo¿esz teraz skorzystaæ z tej komendy.");
+		Info(playerid, "Nie moï¿½esz teraz skorzystaï¿½ z tej komendy.");
 		return 1;
 	}
 
 	new id, cash;
-	if(sscanf(cmdtext, "ii", id, cash)) return Tip(playerid, "Tip: /plac [id gracza] [iloœæ($)]");
-	if(!IsPlayerConnected(id)) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
-	if(id == playerid) return Tip(playerid, "Nie mo¿esz sobie tej oferty zaoferowaæ.");
-	if(GetNearestPlayer(playerid, 5.0) != id) return Tip(playerid, "Ten gracz nie znajdujê siê w Twoim otoczeniu.");
-	if(PlayerData[playerid][char_cash] < cash) return Tip(playerid, "Nie masz przy sobie tyle gotówki.");
+	if(sscanf(cmdtext, "ii", id, cash)) return Tip(playerid, "Tip: /plac [id gracza] [iloï¿½ï¿½($)]");
+	if(!IsPlayerConnected(id)) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
+	if(id == playerid) return Tip(playerid, "Nie moï¿½esz sobie tej oferty zaoferowaï¿½.");
+	if(GetNearestPlayer(playerid, 5.0) != id) return Tip(playerid, "Ten gracz nie znajdujï¿½ siï¿½ w Twoim otoczeniu.");
+	if(PlayerData[playerid][char_cash] < cash) return Tip(playerid, "Nie masz przy sobie tyle gotï¿½wki.");
 
 	PlayerData[id][char_cash] += cash;
 	PlayerData[playerid][char_cash] -= cash;
 
 	new str[64];
-	format(str, sizeof(str), "podaje trochê gotówki %s.", PlayerName(id));
+	format(str, sizeof(str), "podaje trochï¿½ gotï¿½wki %s.", PlayerName(id));
 	cmd_me(playerid, str);
 
 	format(str, sizeof(str), "%s pays %s cash %d$", PlayerName(playerid), PlayerName(id), cash);
@@ -365,7 +365,7 @@ CMD:v(playerid, cmdtext[])
 {
     if(PlayerData[playerid][char_bw] != 0)
 	{
-		Info(playerid, "Nie mo¿esz teraz skorzystaæ z tej komendy.");
+		Info(playerid, "Nie moï¿½esz teraz skorzystaï¿½ z tej komendy.");
 		return 1;
 	}
 
@@ -396,7 +396,7 @@ CMD:v(playerid, cmdtext[])
 			if(vehicles > 0)
 				ShowPlayerDialog(playerid, D_VEHICLES, DIALOG_STYLE_TABLIST_HEADERS, "Twoje pojazdy (* zespawnowany )", string, "(Un)spawn", "Anuluj");
 			else
-		    	Info(playerid, "Twoja postaæ nie posiada ¿adnych pojazdów.");
+		    	Info(playerid, "Twoja postaï¿½ nie posiada ï¿½adnych pojazdï¿½w.");
 		}
 		else if(IsPlayerInAnyVehicle(playerid) && GetPlayerVehicleSeat(playerid) == 0)
 		{
@@ -409,7 +409,7 @@ CMD:v(playerid, cmdtext[])
 			format(strcap, sizeof(strcap), "%s (UID: %d)", VehicleNames[GetVehicleModel(vehicleid) - 400], uid);
 
 			new str[500];
-			format(str, sizeof(str), "0\tOtwórz/Zamknij maskê\n1\tOtwórz/Zamknij baga¿nik\n2\tW³¹cz/Zgaœ œwiat³a\n3\tOtwórz/Zamknij szyby\n---------------------------\n5\tSprzedaj pojazd\n6\tOddaj pojazd za darmo\n7\tWymieñ siê pojazdem");
+			format(str, sizeof(str), "0\tOtwï¿½rz/Zamknij maskï¿½\n1\tOtwï¿½rz/Zamknij bagaï¿½nik\n2\tWï¿½ï¿½cz/Zgaï¿½ ï¿½wiatï¿½a\n3\tOtwï¿½rz/Zamknij szyby\n---------------------------\n5\tSprzedaj pojazd\n6\tOddaj pojazd za darmo\n7\tWymieï¿½ siï¿½ pojazdem");
 
 		    ShowPlayerDialog(playerid, D_VEHICLE_INFO, DIALOG_STYLE_TABLIST, strcap, str, "Wybierz", "Anuluj");
 		}
@@ -421,7 +421,7 @@ CMD:v(playerid, cmdtext[])
 			new sampid = GetNearestVehicle(playerid, 4.0);
 			new uid = GetVehicleUID(sampid);
 
-			if(GetNearestVehicle(playerid, 4.0) == -1) return Info(playerid, "W pobli¿u nie znajduje siê ¿aden pojazd.");
+			if(GetNearestVehicle(playerid, 4.0) == -1) return Info(playerid, "W pobliï¿½u nie znajduje siï¿½ ï¿½aden pojazd.");
 
 			if(Vehicle[uid][veh_spawned] && Vehicle[uid][veh_owner] == PlayerData[playerid][char_uid] || IsPlayerAdmin(playerid) || PlayerData[playerid][char_admin_level] > 6)
 			{
@@ -454,7 +454,7 @@ CMD:v(playerid, cmdtext[])
 			}
 			else
 			{
-			    Info(playerid, "Ten pojazd nie jest Twój.");
+			    Info(playerid, "Ten pojazd nie jest Twï¿½j.");
 			}
 		}
 		else if(!strcmp(type, "zaparkuj", true))
@@ -476,11 +476,11 @@ CMD:v(playerid, cmdtext[])
 
 		    		SaveVehicle(uid);
 
-		    		Tip(playerid, "Pojazd zosta³ zaparkowany.");
+		    		Tip(playerid, "Pojazd zostaï¿½ zaparkowany.");
 				}
 				else
 				{
-				    Tip(playerid, "To nie jest Twój pojazd.");
+				    Tip(playerid, "To nie jest Twï¿½j pojazd.");
 				}
 			}
 		}
@@ -489,7 +489,7 @@ CMD:v(playerid, cmdtext[])
 		    new sampid = GetNearestVehicle(playerid, 4.0);
 			new uid = GetVehicleUID(sampid), Float:X, Float:Y, Float:Z;
 
-			if(GetNearestVehicle(playerid, 4.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobli¿u nie znajduje siê ¿aden pojazd.");
+			if(GetNearestVehicle(playerid, 4.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobliï¿½u nie znajduje siï¿½ ï¿½aden pojazd.");
 
 			GetVehiclePos(sampid, X, Y, Z);
 
@@ -508,7 +508,7 @@ CMD:v(playerid, cmdtext[])
 		    new sampid = GetNearestVehicle(playerid, 5.0);
 			new uid = GetVehicleUID(sampid);
 
-			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobli¿u nie znajduje siê ¿aden pojazd.");
+			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobliï¿½u nie znajduje siï¿½ ï¿½aden pojazd.");
 
 			RepairVehicle(sampid);
 			Vehicle[uid][veh_health] = 1000.0;
@@ -520,7 +520,7 @@ CMD:v(playerid, cmdtext[])
 			SaveVehicle(uid);
 
             new str[128];
-			format(str, sizeof(str), "%s naprawi³ pojazd %s(UID: %d)", PlayerName(playerid), VehicleNames[Vehicle[uid][veh_model] - 400], uid);
+			format(str, sizeof(str), "%s naprawiï¿½ pojazd %s(UID: %d)", PlayerName(playerid), VehicleNames[Vehicle[uid][veh_model] - 400], uid);
 			TeamMessage(0xFFFA8EFF, str);
 		}
 		else if(!strcmp(type, "spawn", true))
@@ -565,7 +565,7 @@ CMD:v(playerid, cmdtext[])
 		        new sampid = GetNearestVehicle(playerid, 5.0);
 		        uid = GetVehicleUID(sampid);
 
-		        if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobli¿u nie znajduje siê ¿aden pojazd.");
+		        if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobliï¿½u nie znajduje siï¿½ ï¿½aden pojazd.");
 
 		        PutPlayerInVehicle(playerid, Vehicle[uid][samp_id], 0);
 			}
@@ -581,18 +581,18 @@ CMD:v(playerid, cmdtext[])
 		    if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 7) return 0;
 
 		    new Float:fuel;
-		    if(sscanf(next, "f", fuel)) return Tip(playerid, "Tip: /v fuel [iloœæ np. 100.0]");
-		    if(fuel < 0.0 || fuel > 100.0) return Tip(playerid, "Niepoprawna iloœæ paliwa.");
+		    if(sscanf(next, "f", fuel)) return Tip(playerid, "Tip: /v fuel [iloï¿½ï¿½ np. 100.0]");
+		    if(fuel < 0.0 || fuel > 100.0) return Tip(playerid, "Niepoprawna iloï¿½ï¿½ paliwa.");
 
 			new sampid = GetNearestVehicle(playerid, 5.0);
    			new uid = GetVehicleUID(sampid);
 
-   			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobli¿u nie znajduje siê ¿aden pojazd.");
+   			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobliï¿½u nie znajduje siï¿½ ï¿½aden pojazd.");
 
       		Vehicle[uid][veh_fuel] = fuel;
 
       		new str[128];
-			format(str, sizeof(str), "%s ustawi³ paliwo w pojeŸdzie %s(UID: %d) na %.1f", PlayerName(playerid), VehicleNames[Vehicle[uid][veh_model] - 400], uid, fuel);
+			format(str, sizeof(str), "%s ustawiï¿½ paliwo w pojeï¿½dzie %s(UID: %d) na %.1f", PlayerName(playerid), VehicleNames[Vehicle[uid][veh_model] - 400], uid, fuel);
 			TeamMessage(0xFFFA8EFF, str);
 		}
 		else if(!strcmp(type, "hp", true))
@@ -600,19 +600,19 @@ CMD:v(playerid, cmdtext[])
 		    if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 7) return 0;
 
 		    new Float:health;
-		    if(sscanf(next, "f", health)) return Tip(playerid, "Tip: /v hp [iloœæ np. 1000.0]");
-		    if(health < 0.0 || health > 1000.0) return Tip(playerid, "Niepoprawna iloœæ HP.");
+		    if(sscanf(next, "f", health)) return Tip(playerid, "Tip: /v hp [iloï¿½ï¿½ np. 1000.0]");
+		    if(health < 0.0 || health > 1000.0) return Tip(playerid, "Niepoprawna iloï¿½ï¿½ HP.");
 
       		new sampid = GetNearestVehicle(playerid, 5.0);
         	new uid = GetVehicleUID(sampid);
 
-            if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobli¿u nie znajduje siê ¿aden pojazd.");
+            if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[uid][veh_spawned]) return Info(playerid, "W pobliï¿½u nie znajduje siï¿½ ï¿½aden pojazd.");
 
 			Vehicle[uid][veh_health] = health;
 			SetVehicleHealth(sampid, health);
 
 			new str[128];
-			format(str, sizeof(str), "%s ustawi³ hp w pojeŸdzie %s(UID: %d) na %.1f", PlayerName(playerid), VehicleNames[Vehicle[uid][veh_model] - 400], uid, health);
+			format(str, sizeof(str), "%s ustawiï¿½ hp w pojeï¿½dzie %s(UID: %d) na %.1f", PlayerName(playerid), VehicleNames[Vehicle[uid][veh_model] - 400], uid, health);
 			TeamMessage(0xFFFA8EFF, str);
 		}
 		else if(!strcmp(type, "owner", true))
@@ -625,13 +625,13 @@ CMD:v(playerid, cmdtext[])
 		    new sampid = GetNearestVehicle(playerid, 5.0);
 			new vuid = GetVehicleUID(sampid);
 
-			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[vuid][veh_spawned]) return Info(playerid, "W pobli¿u nie znajduje siê ¿aden pojazd.");
+			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[vuid][veh_spawned]) return Info(playerid, "W pobliï¿½u nie znajduje siï¿½ ï¿½aden pojazd.");
 
 		    Vehicle[vuid][veh_owner] = puid;
 	    	SaveVehicle(vuid);
 
             new str[256];
-			format(str, sizeof(str), "%s ustawi³ w³aœciciela pojazdu %s(UID: %d) na UID postaci: %d", PlayerName(playerid), VehicleNames[Vehicle[vuid][veh_model] - 400], vuid, puid);
+			format(str, sizeof(str), "%s ustawiï¿½ wï¿½aï¿½ciciela pojazdu %s(UID: %d) na UID postaci: %d", PlayerName(playerid), VehicleNames[Vehicle[vuid][veh_model] - 400], vuid, puid);
 			TeamMessage(0xFFFA8EFF, str);
 		}
 		else if(!strcmp(type, "kolor", true))
@@ -644,7 +644,7 @@ CMD:v(playerid, cmdtext[])
 		    new sampid = GetNearestVehicle(playerid, 5.0);
 			new vuid = GetVehicleUID(sampid);
 
-			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[vuid][veh_spawned]) return Info(playerid, "W pobli¿u nie znajduje siê ¿aden pojazd.");
+			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[vuid][veh_spawned]) return Info(playerid, "W pobliï¿½u nie znajduje siï¿½ ï¿½aden pojazd.");
 
 			Vehicle[vuid][veh_color][0] = kolor[0];
 			Vehicle[vuid][veh_color][1] = kolor[1];
@@ -653,7 +653,7 @@ CMD:v(playerid, cmdtext[])
 			ChangeVehicleColor(sampid, kolor[0], kolor[1]);
 
 			new str[256];
-			format(str, sizeof(str), "%s zmieni³ kolory pojazdu %s(UID: %d) na %d:%d", PlayerName(playerid), VehicleNames[Vehicle[vuid][veh_model] - 400], vuid, kolor[0], kolor[1]);
+			format(str, sizeof(str), "%s zmieniï¿½ kolory pojazdu %s(UID: %d) na %d:%d", PlayerName(playerid), VehicleNames[Vehicle[vuid][veh_model] - 400], vuid, kolor[0], kolor[1]);
 			TeamMessage(0xFFFA8EFF, str);
 		}
 		else if(!strcmp(type, "pj", true))
@@ -662,12 +662,12 @@ CMD:v(playerid, cmdtext[])
 
 		    new pj;
 		    if(sscanf(next, "i", pj)) return Tip(playerid, "Tip: /v pj [0-2] (3 - usuwa paintjob)");
-		    if(pj < 0 || pj > 3) return Info(playerid, "Paintjob nie mo¿e byæ mniejszy ni¿ 0 lub wiêkszy ni¿ 2.\n3 - usuwa paintjob.");
+		    if(pj < 0 || pj > 3) return Info(playerid, "Paintjob nie moï¿½e byï¿½ mniejszy niï¿½ 0 lub wiï¿½kszy niï¿½ 2.\n3 - usuwa paintjob.");
 
 		    new sampid = GetNearestVehicle(playerid, 5.0);
 			new vuid = GetVehicleUID(sampid);
 
-			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[vuid][veh_spawned]) return Info(playerid, "W pobli¿u nie znajduje siê ¿aden pojazd.");
+			if(GetNearestVehicle(playerid, 5.0) == -1 || !Vehicle[vuid][veh_spawned]) return Info(playerid, "W pobliï¿½u nie znajduje siï¿½ ï¿½aden pojazd.");
 
 			Vehicle[vuid][veh_paintjob] = pj;
 			SaveVehicle(vuid);
@@ -677,13 +677,13 @@ CMD:v(playerid, cmdtext[])
 			if(pj == 3)
 			{
 			    new str[256];
-				format(str, sizeof(str), "%s usun¹³ paintjob z pojazdu %s(UID: %d)", PlayerName(playerid), VehicleNames[Vehicle[vuid][veh_model] - 400], vuid);
+				format(str, sizeof(str), "%s usunï¿½ï¿½ paintjob z pojazdu %s(UID: %d)", PlayerName(playerid), VehicleNames[Vehicle[vuid][veh_model] - 400], vuid);
 				TeamMessage(0xFFFA8EFF, str);
 			}
 			else
 			{
 			    new str[256];
-				format(str, sizeof(str), "%s zmieni³ paintjob pojazdu %s(UID: %d) na %d", PlayerName(playerid), VehicleNames[Vehicle[vuid][veh_model] - 400], vuid, pj);
+				format(str, sizeof(str), "%s zmieniï¿½ paintjob pojazdu %s(UID: %d) na %d", PlayerName(playerid), VehicleNames[Vehicle[vuid][veh_model] - 400], vuid, pj);
 				TeamMessage(0xFFFA8EFF, str);
 			}
 		}
@@ -695,7 +695,7 @@ CMD:p(playerid, cmdtext[])
 {
     if(PlayerData[playerid][char_bw] != 0)
 	{
-		Info(playerid, "Nie mo¿esz teraz skorzystaæ z tej komendy.");
+		Info(playerid, "Nie moï¿½esz teraz skorzystaï¿½ z tej komendy.");
 		return 1;
 	}
 
@@ -703,7 +703,7 @@ CMD:p(playerid, cmdtext[])
 	if(sscanf(cmdtext, "s[64]", nazwa))
 	{
 		new items = 0, string[2500];
-		format(string, sizeof(string), "UID\tNazwa\tWartoœci\nTwoje przedmioty:");
+		format(string, sizeof(string), "UID\tNazwa\tWartoï¿½ci\nTwoje przedmioty:");
 
 		for(new i=0; i<MAX_ITEMS; i++)
 		{
@@ -720,7 +720,7 @@ CMD:p(playerid, cmdtext[])
 		if(items > 0)
 			ShowPlayerDialog(playerid, D_ITEMS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty", string, "Wybierz", "Opcje");
 		else
-		    Info(playerid, "Nie posiadasz ¿adnych przedmiotów przy sobie.");
+		    Info(playerid, "Nie posiadasz ï¿½adnych przedmiotï¿½w przy sobie.");
 	}
 	else
 	{
@@ -749,7 +749,7 @@ CMD:p(playerid, cmdtext[])
 
 			if(count > 0)
 			{
-			    ShowPlayerDialog(playerid, D_NEAREST_ITEMS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty w pobli¿u", strr, "Podnies", "Anuluj");
+			    ShowPlayerDialog(playerid, D_NEAREST_ITEMS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty w pobliï¿½u", strr, "Podnies", "Anuluj");
 			}
 			else
 			{
@@ -787,15 +787,15 @@ CMD:me(playerid, params[])
 {
 	if(PlayerData[playerid][char_bw] != 0)
 	{
-		Info(playerid, "Nie mo¿esz teraz skorzystaæ z tej komendy.");
+		Info(playerid, "Nie moï¿½esz teraz skorzystaï¿½ z tej komendy.");
 		return 1;
 	}
 
     new string[250];
 	if(sscanf(params, "s[144]", string))
 	{
-		Tip(playerid, "Tip: /me [Opis czynnoœci] - Komenda s³u¿y do opisywania czynnoœci któr¹ wykonuje twoja postaæ.");
-		Tip(playerid, "Przyk³ad: /me Wyci¹gn¹³/a z kieszeni notes, a nastêpnie otworzy³/a go.");
+		Tip(playerid, "Tip: /me [Opis czynnoï¿½ci] - Komenda sï¿½uï¿½y do opisywania czynnoï¿½ci ktï¿½rï¿½ wykonuje twoja postaï¿½.");
+		Tip(playerid, "Przykï¿½ad: /me Wyciï¿½gnï¿½ï¿½/a z kieszeni notes, a nastï¿½pnie otworzyï¿½/a go.");
 		return 1;
 	}
 	format(string, sizeof(string), "** %s %s", PlayerName(playerid), string);
@@ -809,8 +809,8 @@ CMD:do(playerid, cmdtext[])
 	new string[250];
 	if(sscanf(cmdtext, "s[144]", string))
 	{
-	    Tip(playerid, "Tip: /do [Opis otoczenia] - Komenda s³u¿y do opisywania otoczenia.");
-	    Tip(playerid, "Przyk³ad: /do Podczas uderzenia mo¿na zauwa¿yæ zniszczenie pojazdu, kierowca nieprzytomny.");
+	    Tip(playerid, "Tip: /do [Opis otoczenia] - Komenda sï¿½uï¿½y do opisywania otoczenia.");
+	    Tip(playerid, "Przykï¿½ad: /do Podczas uderzenia moï¿½na zauwaï¿½yï¿½ zniszczenie pojazdu, kierowca nieprzytomny.");
 	    return 1;
 	}
 	string[0] = toupper(string[0]);
@@ -840,21 +840,21 @@ CMD:area(playerid, cmdtext[])
 	new type[32], next[64];
 	if(sscanf(cmdtext, "s[32]S()[64]", type, next))
 	{
-		if(GetPlayerZone(playerid) != 0)
+		if(GetPlayerZone(playerid) != -1)
 		{
 			new str[64], string[256], uid = GetPlayerZone(playerid);
 			FreeID[playerid] = uid;
-			string = "Ustawienia\tWartoœci";
+			string = "Ustawienia\tWartoÅ›ci";
 
 			format(str, sizeof(str), "Strefa %s (UID: %d) (SampID: %d)", Zone[uid][z_name], Zone[uid][z_uid], Zone[uid][z_sampid]);
-			format(string, sizeof(string), "%s\nPrzejmij strefê", string);
-			if(IsPlayerAdmin(playerid) || PlayerData[playerid][char_admin_level] > 6) format(string, sizeof(string), "%s\n-------------------------\nW³aœciciel:\t%d\nBudynek mieszkalny:\t%d$\nBudynek biznesowy:\t%d$\nMinimalny metra¿:\t%dm2", string, Zone[uid][z_owner], Zone[uid][z_house_cost], Zone[uid][z_buis_cost], Zone[uid][z_size]);
+			format(string, sizeof(string), "%s\nPrzejmij strefÄ™", string);
+			if(IsPlayerAdmin(playerid) || PlayerData[playerid][char_admin_level] > 6) format(string, sizeof(string), "%s\n-------------------------\nWÅ‚aÅ›ciciel:\t%d\nBudynek mieszkalny:\t%d$\nBudynek biznesowy:\t%d$\nMinimalny metraÅ¼:\t%dm2", string, Zone[uid][z_owner], Zone[uid][z_house_cost], Zone[uid][z_buis_cost], Zone[uid][z_size]);
 
 			ShowPlayerDialog(playerid, D_AREA, DIALOG_STYLE_TABLIST_HEADERS, str, string, "Wybierz", "Anuluj");
 		}
 		else
 		{
-	    	Tip(playerid, "Nie znajdujesz siê na ¿adnej strefie.");
+	    	Tip(playerid, "Nie znajdujesz siÄ™ na Å¼adnej strefie.");
 		}
 	}
 	else
@@ -886,13 +886,13 @@ CMD:area(playerid, cmdtext[])
 			format(str, sizeof(str), "~y~Strefa ~w~%s ~y~UID: ~w~%d~n~~y~Idz do punktu ~w~South West ~y~i kliknij ~w~Y ~y~aby zaznaczyc pozycje.", Zone[uid][z_name], Zone[uid][z_uid]);
 			InfoTD(playerid, str);
 
-			Tip(playerid, "Rozpoczêto tworzenie strefy.");
+			Tip(playerid, "Rozpoczï¿½to tworzenie strefy.");
 		}
 		else if(!strcmp(type, "usun", true))
 		{
 		    if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 7) return 0;
 
-			if(GetPlayerZone(playerid) == 0) return Tip(playerid, "Nie jesteœ na ¿adnej strefie.");
+			if(GetPlayerZone(playerid) == 0) return Tip(playerid, "Nie jesteï¿½ na ï¿½adnej strefie.");
 
 			new uid = GetPlayerZone(playerid);
 
@@ -927,13 +927,13 @@ CMD:set(playerid, cmdtext[])
 	if(!strcmp(type, "strength", true))
 	{
 	    new id, ilosc;
-	    if(sscanf(next, "ii", id, ilosc)) return Tip(playerid, "Tip: /set strength [id gracza] [iloœæ jednostek]");
-	    if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+	    if(sscanf(next, "ii", id, ilosc)) return Tip(playerid, "Tip: /set strength [id gracza] [iloï¿½ï¿½ jednostek]");
+	    if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
 
 	    PlayerData[id][char_strength] = ilosc;
 
 	    new str[128];
-		format(str, sizeof(str), "%s ustawi³ si³ê gracza %s(ID: %d) na %dj", PlayerName(playerid), PlayerName(id), id, PlayerData[id][char_strength]);
+		format(str, sizeof(str), "%s ustawiï¿½ siï¿½ï¿½ gracza %s(ID: %d) na %dj", PlayerName(playerid), PlayerName(id), id, PlayerData[id][char_strength]);
 		TeamMessage(0xFFFA8EFF, str);
 
 		UpdateNick(id);
@@ -941,21 +941,21 @@ CMD:set(playerid, cmdtext[])
 	else if(!strcmp(type, "hp", true))
 	{
 	    new id, Float:ilosc;
-	    if(sscanf(next, "if", id, ilosc)) return Tip(playerid, "Tip: /set hp [id gracza] [iloœæ HP np. 100.0]");
-	    if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+	    if(sscanf(next, "if", id, ilosc)) return Tip(playerid, "Tip: /set hp [id gracza] [iloï¿½ï¿½ HP np. 100.0]");
+	    if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
 
 	    SetPlayerHealthEx(id, ilosc);
 
 	    new str[128];
-		format(str, sizeof(str), "%s ustawi³ HP gracza %s(ID: %d) na %.1f", PlayerName(playerid), PlayerName(id), id, PlayerData[id][char_health]);
+		format(str, sizeof(str), "%s ustawiï¿½ HP gracza %s(ID: %d) na %.1f", PlayerName(playerid), PlayerName(id), id, PlayerData[id][char_health]);
 		TeamMessage(0xFFFA8EFF, str);
 	}
 	else if(!strcmp(type, "premium", true))
 	{
 	    new id, dni;
-	    if(sscanf(next, "ii", id, dni)) return Tip(playerid, "Tip: /set premium [id gracza] [iloœæ dni np. 30]");
-	    if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
-	    if(dni < 0 || dni > 60) return Info(playerid, "Iloœæ dni nie mo¿e przekraczaæ 60 dni.");
+	    if(sscanf(next, "ii", id, dni)) return Tip(playerid, "Tip: /set premium [id gracza] [iloï¿½ï¿½ dni np. 30]");
+	    if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
+	    if(dni < 0 || dni > 60) return Info(playerid, "Iloï¿½ï¿½ dni nie moï¿½e przekraczaï¿½ 60 dni.");
 
 	    PlayerData[id][char_premium] = (dni * 24 * 60 * 60) + gettime();
 
@@ -964,19 +964,19 @@ CMD:set(playerid, cmdtext[])
 		mysql_query(DB_Query);
 
 	    new str[128];
-		format(str, sizeof(str), "%s ustawi³ premium gracza %s(ID: %d) na %d dni", PlayerName(playerid), PlayerName(id), id, dni);
+		format(str, sizeof(str), "%s ustawiï¿½ premium gracza %s(ID: %d) na %d dni", PlayerName(playerid), PlayerName(id), id, dni);
 		TeamMessage(0xFFFA8EFF, str);
 	}
 	else if(!strcmp(type, "time", true))
 	{
 	    new time;
 	    if(sscanf(next, "i", time)) return Tip(playerid, "Tip: /set time [0-24]");
-	    if(time < 0 || time > 24) return Tip(playerid, "Wpisano b³êdn¹ godzinê.");
+	    if(time < 0 || time > 24) return Tip(playerid, "Wpisano bï¿½ï¿½dnï¿½ godzinï¿½.");
 
 	    SetWorldTime(time);
 
 	    new str[128];
-		format(str, sizeof(str), "%s ustawi³ godzinê na %d:00", PlayerName(playerid), time);
+		format(str, sizeof(str), "%s ustawiï¿½ godzinï¿½ na %d:00", PlayerName(playerid), time);
 		TeamMessage(0xFFFA8EFF, str);
 	}
 	else if(!strcmp(type, "weather", true))
@@ -987,19 +987,19 @@ CMD:set(playerid, cmdtext[])
 	    SetWeather(weather);
 
 	    new str[128];
-		format(str, sizeof(str), "%s ustawi³ pogodê na %d", PlayerName(playerid), weather);
+		format(str, sizeof(str), "%s ustawiï¿½ pogodï¿½ na %d", PlayerName(playerid), weather);
 		TeamMessage(0xFFFA8EFF, str);
 	}
 	else if(!strcmp(type, "skin", true))
 	{
 	    new id, idskina;
 	    if(sscanf(next, "ii", id, idskina)) return Tip(playerid, "Tip: /set skin [id gracza] [id skina]");
-		if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+		if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
 
 		SetPlayerSkin(id, idskina);
 
 		new str[128];
-		format(str, sizeof(str), "%s zmieni³ ID skina tymczasowego, gracza %s(ID: %d) na %d", PlayerName(playerid), PlayerName(id), id, idskina);
+		format(str, sizeof(str), "%s zmieniï¿½ ID skina tymczasowego, gracza %s(ID: %d) na %d", PlayerName(playerid), PlayerName(id), id, idskina);
 		TeamMessage(0xFFFA8EFF, str);
 	}
 	return 1;
@@ -1015,17 +1015,17 @@ CMD:hp(playerid, cmdtext[])
 	    SetPlayerHealthEx(playerid, 100.0);
 
 	    new str[128];
-		format(str, sizeof(str), "%s ustawi³ HP gracza %s(ID: %d) na 100.0", PlayerName(playerid), PlayerName(playerid), playerid);
+		format(str, sizeof(str), "%s ustawiï¿½ HP gracza %s(ID: %d) na 100.0", PlayerName(playerid), PlayerName(playerid), playerid);
 		TeamMessage(0xFFFA8EFF, str);
 	}
 	else
 	{
-	    if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+	    if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
 
 	    SetPlayerHealthEx(id, 100.0);
 
 	    new str[128];
-		format(str, sizeof(str), "%s ustawi³ HP gracza %s(ID: %d) na 100.0", PlayerName(playerid), PlayerName(id), id);
+		format(str, sizeof(str), "%s ustawiï¿½ HP gracza %s(ID: %d) na 100.0", PlayerName(playerid), PlayerName(id), id);
 		TeamMessage(0xFFFA8EFF, str);
 	}
 	return 1;
@@ -1037,7 +1037,7 @@ CMD:cid(playerid, cmdtext[])
 
 	new id;
 	if(sscanf(cmdtext, "i", id)) return Tip(playerid, "Tip: /cid [id gracza]");
-	if(!IsPlayerConnected(id)) return Tip(playerid, "Ten gracz nie jest po³¹czony");
+	if(!IsPlayerConnected(id)) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony");
 
 	new serial[128];
 	gpci(id, serial, sizeof(serial));
@@ -1053,7 +1053,7 @@ CMD:ado(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 7) return 0;
 
 	new text[128];
-	if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /ado [treœæ]");
+	if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /ado [treï¿½ï¿½]");
 
 	new str[144];
 	format(str, sizeof(str), "* %s *", text);
@@ -1066,7 +1066,7 @@ CMD:glob(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 7) return 0;
 
     new text[128];
-    if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /glob [treœæ]");
+    if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /glob [treï¿½ï¿½]");
 
     new str[144];
     format(str, sizeof(str), "%s: %s", PlayerName(playerid), text);
@@ -1079,7 +1079,7 @@ CMD:gm(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 1) return 0;
 
     new text[128];
-	if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /gm [treœæ]");
+	if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /gm [treï¿½ï¿½]");
 
 	new str[144];
 	format(str, sizeof(str), "< (%d) %s: %s >", playerid, PlayerName(playerid), text);
@@ -1092,7 +1092,7 @@ CMD:a(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 7) return cmd_admins(playerid, "");
 
     new text[128];
-	if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /a [treœæ]");
+	if(sscanf(cmdtext, "s[128]", text)) return Tip(playerid, "Tip: /a [treï¿½ï¿½]");
 
 	new str[144];
 	format(str, sizeof(str), "< (%d) %s: %s >", playerid, PlayerName(playerid), text);
@@ -1158,7 +1158,7 @@ CMD:bw(playerid, cmdtext[])
 			TogglePlayerControllable(playerid, true);
 
 			new str[128];
-			format(str, sizeof(str), "%s zdj¹³ BW dla gracza %s", PlayerName(playerid), PlayerName(playerid));
+			format(str, sizeof(str), "%s zdjï¿½ï¿½ BW dla gracza %s", PlayerName(playerid), PlayerName(playerid));
 			TeamMessage(0xFFFA8EFF, str);
 
 			UpdateNick(playerid);
@@ -1172,7 +1172,7 @@ CMD:bw(playerid, cmdtext[])
 	    	PlayerData[playerid][char_last_damaged_weapon] = -1;
 
 	    	new str[128];
-			format(str, sizeof(str), "%s nada³ BW dla gracza %s", PlayerName(playerid), PlayerName(playerid));
+			format(str, sizeof(str), "%s nadaï¿½ BW dla gracza %s", PlayerName(playerid), PlayerName(playerid));
 			TeamMessage(0xFFFA8EFF, str);
 
 			UpdateNick(playerid);
@@ -1180,7 +1180,7 @@ CMD:bw(playerid, cmdtext[])
 	}
 	else
 	{
-	    if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+	    if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
 
 	    if(PlayerData[id][char_bw] != 0)
 	    {
@@ -1193,7 +1193,7 @@ CMD:bw(playerid, cmdtext[])
 			PlayerData[id][char_last_damaged_weapon] = -1;
 
 			new str[128];
-			format(str, sizeof(str), "%s zdj¹³ BW dla gracza %s", PlayerName(playerid), PlayerName(id));
+			format(str, sizeof(str), "%s zdjï¿½ï¿½ BW dla gracza %s", PlayerName(playerid), PlayerName(id));
 			TeamMessage(0xFFFA8EFF, str);
 
 			UpdateNick(id);
@@ -1207,7 +1207,7 @@ CMD:bw(playerid, cmdtext[])
 	    	PlayerData[id][char_last_damaged_weapon] = -1;
 
 	    	new str[128];
-			format(str, sizeof(str), "%s nada³ BW dla gracza %s", PlayerName(playerid), PlayerName(id));
+			format(str, sizeof(str), "%s nadaï¿½ BW dla gracza %s", PlayerName(playerid), PlayerName(id));
 			TeamMessage(0xFFFA8EFF, str);
 
 			UpdateNick(id);
@@ -1222,7 +1222,7 @@ CMD:to(playerid, cmdtext[])
 
 	new id;
 	if(sscanf(cmdtext, "i", id)) return Tip(playerid, "Tip: /to [id gracza]");
-	if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+	if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
 
 	if(IsPlayerInAnyVehicle(playerid) && GetPlayerVehicleSeat(playerid) == 0)
 	{
@@ -1247,7 +1247,7 @@ CMD:tm(playerid, cmdtext[])
 
 	new id;
 	if(sscanf(cmdtext, "i", id)) return Tip(playerid, "Tip: /tm [id gracza]");
-	if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+	if(!IsPlayerConnected(id) && !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
 
 	if(IsPlayerInAnyVehicle(id) && GetPlayerVehicleSeat(id) == 0)
 	{
@@ -1288,10 +1288,10 @@ CMD:vc(playerid, cmdtext[])
 	Vehicle[uid][veh_model] = 400;
 
 	new StrinG[1000];
-	format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
+	format(StrinG, sizeof(StrinG), "Ustawienia\tWartoï¿½ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdï¿½, stwï¿½rz pojazd",
 		VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-	ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
+	ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "Zatwierdï¿½", "Anuluj");
 	return 1;
 }
 
@@ -1304,10 +1304,10 @@ CMD:item(playerid, cmdtext[])
 	format(Item[uid][Name], 64, "Brak");
 
 	new StrinG[1000];
-	format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
-		Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+	format(StrinG, sizeof(StrinG), "Ustawienia\tWartoï¿½ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoï¿½ï¿½ (1):\t%d\nWartoï¿½ï¿½ (2):\t%d\nWartoï¿½ï¿½ (3):\t%d\n\
+		Wartoï¿½ï¿½ (4):\t%d\nWartoï¿½ï¿½ (5):\t%d\nWartoï¿½ï¿½ (6):\t%d\nOwner:\t%d\nZatwierdï¿½, stwï¿½rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-	ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
+	ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "Zatwierdï¿½", "Anuluj");
 	return 1;
 }
 
@@ -1327,7 +1327,7 @@ CMD:gmx(playerid, cmdtext[])
 	}
 
 	new str[128];
-	format(str, sizeof(str), "%s uruchomi³ procedurê restartu serwera.", PlayerName(playerid));
+	format(str, sizeof(str), "%s uruchomiï¿½ procedurï¿½ restartu serwera.", PlayerName(playerid));
 	TeamMessage(0xFFFA8EFF, str);
 
 	SetTimer("GMXTimer", time * 1000, false);
@@ -1353,7 +1353,7 @@ CMD:rc(playerid, cmdtext[])
 	    	TogglePlayerSpectating(playerid, 0);
 			PlayerData[playerid][char_spectate_id] = -1;
 
-			//Powrót na pozycjê zapisan¹ przed wpisaniem /rc [id], interior, world
+			//Powrï¿½t na pozycjï¿½ zapisanï¿½ przed wpisaniem /rc [id], interior, world
 			SetPlayerPos(playerid, PlayerData[playerid][char_last_pos][0], PlayerData[playerid][char_last_pos][1], PlayerData[playerid][char_last_pos][2]);
 			SetPlayerFacingAngle(playerid, PlayerData[playerid][char_last_pos][3]);
 			SetPlayerInterior(playerid, PlayerData[playerid][char_interior]);
@@ -1362,14 +1362,14 @@ CMD:rc(playerid, cmdtext[])
 	}
 	else
 	{
-	    if(id == playerid) return Tip(playerid, "Nie mo¿esz podgl¹daæ samego siebie.");
+	    if(id == playerid) return Tip(playerid, "Nie moï¿½esz podglï¿½daï¿½ samego siebie.");
 
-	    if(!IsPlayerConnected(id)) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+	    if(!IsPlayerConnected(id)) return Tip(playerid, "Ten gracz nie jest poï¿½ï¿½czony.");
 
 		if(PlayerData[id][char_spectate_id] != -1)
 		{
 		    new str[64];
-		    format(str, sizeof(str), "Ta osoba podgl¹da %s(ID: %d)", PlayerName(PlayerData[id][char_spectate_id]), PlayerData[id][char_spectate_id]);
+		    format(str, sizeof(str), "Ta osoba podglï¿½da %s(ID: %d)", PlayerName(PlayerData[id][char_spectate_id]), PlayerData[id][char_spectate_id]);
 		    Tip(playerid, str);
 		    return 1;
 		}
@@ -1377,12 +1377,12 @@ CMD:rc(playerid, cmdtext[])
 		if(PlayerData[playerid][char_spectate_id] != -1)
 		{
 		    new str[128];
-		    format(str, sizeof(str), "Aktualnie podgl¹dasz ju¿ jak¹œ osobê, u¿yj ~k~~PED_SPRINT~ lub ~k~~SNEAK_ABOUT~ aby przegl¹daæ graczy.");
+		    format(str, sizeof(str), "Aktualnie podglï¿½dasz juï¿½ jakï¿½ï¿½ osobï¿½, uï¿½yj ~k~~PED_SPRINT~ lub ~k~~SNEAK_ABOUT~ aby przeglï¿½daï¿½ graczy.");
 			Tip(playerid, str);
 			return 1;
 		}
 
-		if(PlayerData[id][char_admin_level] > 0 && PlayerData[playerid][char_admin_level] < 7) return Tip(playerid, "Nie mo¿esz podgl¹daæ Administratorów.");
+		if(PlayerData[id][char_admin_level] > 0 && PlayerData[playerid][char_admin_level] < 7) return Tip(playerid, "Nie moï¿½esz podglï¿½daï¿½ Administratorï¿½w.");
 
 		GetPlayerPos(playerid, PlayerData[playerid][char_last_pos][0], PlayerData[playerid][char_last_pos][1], PlayerData[playerid][char_last_pos][2]);
 		GetPlayerFacingAngle(playerid, PlayerData[playerid][char_last_pos][3]);
@@ -1407,7 +1407,7 @@ CMD:mc(playerid, cmdtext[])
 	if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6) return 0;
 
 	if(PlayerData[playerid][char_edit_object] != -1)
-	    return Tip(playerid, "Aktualnie edytujesz ju¿ jakiœ obiekt.");
+	    return Tip(playerid, "Aktualnie edytujesz juï¿½ jakiï¿½ obiekt.");
 
 	new objectid;
 	if(sscanf(cmdtext, "d", objectid)) return Tip(playerid, "Tip: /mc [id obiektu]");
@@ -1441,13 +1441,13 @@ CMD:mc(playerid, cmdtext[])
 		mysql_query(DB_Query);
 	}
 
-	Tip(playerid, "Pomyœlnie utworzono obiekt.");
+	Tip(playerid, "Pomyï¿½lnie utworzono obiekt.");
 	return 1;
 }
 
 CMD:msel(playerid, cmdtext[])
 {
-	if(GetNearestObject(playerid, 50.0) == -1) return Tip(playerid, "Nie ma ¿adnych obiektów w pobli¿u.");
+	if(GetNearestObject(playerid, 50.0) == -1) return Tip(playerid, "Nie ma ï¿½adnych obiektï¿½w w pobliï¿½u.");
 
 	PlayerData[playerid][char_edit_object] = GetNearestObject(playerid, 50.0);
 	return 1;
@@ -1458,7 +1458,7 @@ CMD:md(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6) return 0;
 
 	if(PlayerData[playerid][char_edit_object] == -1)
-	    return Tip(playerid, "Aktualnie nie edytujesz ¿adnego obiektu.");
+	    return Tip(playerid, "Aktualnie nie edytujesz ï¿½adnego obiektu.");
 
 	DestroyDynamicObject(PlayerData[playerid][char_edit_object]);
 
@@ -1486,7 +1486,7 @@ CMD:md(playerid, cmdtext[])
 	PlayerData[playerid][char_edit_stage] = STAGE_OBJECT_NONE;
 	ClearAnimations(playerid);
 
-	Tip(playerid, "Pomyœlnie usuniêto obiekt.");
+	Tip(playerid, "Pomyï¿½lnie usuniï¿½to obiekt.");
 	return 1;
 }
 
@@ -1495,7 +1495,7 @@ CMD:msave(playerid, cmdtext[])
 	if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6) return 0;
 
 	if(PlayerData[playerid][char_edit_object] == -1)
-	    return Tip(playerid, "Aktualnie nie edytujesz ¿adnego obiektu.");
+	    return Tip(playerid, "Aktualnie nie edytujesz ï¿½adnego obiektu.");
 
 	new uid = GetObjectUID(PlayerData[playerid][char_edit_object]);
 	SaveObject(uid);
@@ -1504,7 +1504,7 @@ CMD:msave(playerid, cmdtext[])
 	PlayerData[playerid][char_edit_stage] = STAGE_OBJECT_NONE;
 	ClearAnimations(playerid);
 
-	Tip(playerid, "Pomyœlnie zapisano obiekt.");
+	Tip(playerid, "Pomyï¿½lnie zapisano obiekt.");
 	return 1;
 }
 
@@ -1513,7 +1513,7 @@ CMD:rx(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6) return 0;
 
 	if(PlayerData[playerid][char_edit_object] == -1)
-	    return Tip(playerid, "Aktualnie nie edytujesz ¿adnego obiektu.");
+	    return Tip(playerid, "Aktualnie nie edytujesz ï¿½adnego obiektu.");
 
 	new Float:rX;
 	if(sscanf(cmdtext, "f", rX)) return Tip(playerid, "Tip: /rx [pozycja]");
@@ -1531,7 +1531,7 @@ CMD:ry(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6) return 0;
 
 	if(PlayerData[playerid][char_edit_object] == -1)
-	    return Tip(playerid, "Aktualnie nie edytujesz ¿adnego obiektu.");
+	    return Tip(playerid, "Aktualnie nie edytujesz ï¿½adnego obiektu.");
 
     new Float:rY;
 	if(sscanf(cmdtext, "f", rY)) return Tip(playerid, "Tip: /ry [pozycja]");
@@ -1549,7 +1549,7 @@ CMD:rz(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6) return 0;
 
 	if(PlayerData[playerid][char_edit_object] == -1)
-	    return Tip(playerid, "Aktualnie nie edytujesz ¿adnego obiektu.");
+	    return Tip(playerid, "Aktualnie nie edytujesz ï¿½adnego obiektu.");
 
     new Float:rZ;
 	if(sscanf(cmdtext, "f", rZ)) return Tip(playerid, "Tip: /rz [pozycja]");
@@ -1567,7 +1567,7 @@ CMD:ox(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6) return 0;
 
 	if(PlayerData[playerid][char_edit_object] == -1)
-	    return Tip(playerid, "Aktualnie nie edytujesz ¿adnego obiektu.");
+	    return Tip(playerid, "Aktualnie nie edytujesz ï¿½adnego obiektu.");
 
 	new Float:rX;
 	if(sscanf(cmdtext, "f", rX)) return Tip(playerid, "Tip: /ox [pozycja]");
@@ -1585,7 +1585,7 @@ CMD:oy(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6) return 0;
 
 	if(PlayerData[playerid][char_edit_object] == -1)
-	    return Tip(playerid, "Aktualnie nie edytujesz ¿adnego obiektu.");
+	    return Tip(playerid, "Aktualnie nie edytujesz ï¿½adnego obiektu.");
 
     new Float:rY;
 	if(sscanf(cmdtext, "f", rY)) return Tip(playerid, "Tip: /oy [pozycja]");
@@ -1603,7 +1603,7 @@ CMD:oz(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6) return 0;
 
 	if(PlayerData[playerid][char_edit_object] == -1)
-	    return Tip(playerid, "Aktualnie nie edytujesz ¿adnego obiektu.");
+	    return Tip(playerid, "Aktualnie nie edytujesz ï¿½adnego obiektu.");
 
     new Float:rZ;
 	if(sscanf(cmdtext, "f", rZ)) return Tip(playerid, "Tip: /oz [pozycja]");
@@ -1622,7 +1622,7 @@ CMD:mmat(playerid, cmdtext[])
     if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 6 && (door == 0 || Doors[door][Owner] != PlayerData[playerid][char_uid])) return 0;
 
 	if(PlayerData[playerid][char_edit_object] == -1)
-	    return Tip(playerid, "Aktualnie nie edytujesz ¿adnego obiektu.");
+	    return Tip(playerid, "Aktualnie nie edytujesz ï¿½adnego obiektu.");
 
 	new type, next[500];
 	if(sscanf(cmdtext, "iS()[500]", type, next)) return Tip(playerid, "Tip: /mmat [typ 0 - obiekt, 1 - tekst] [...]");
