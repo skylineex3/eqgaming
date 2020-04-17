@@ -2,7 +2,7 @@ stock UseItem(playerid, uid)
 {
 	if(Item[uid][Type] == 0)
 	{
-	    Tip(playerid, "Ten przedmiot nie posiada �adnej funkcji skryptowej.");
+	    Tip(playerid, "Ten przedmiot nie posiada żadnej funkcji skryptowej.");
 	}
     else if(Item[uid][Type] == 1)
 	{
@@ -12,7 +12,7 @@ stock UseItem(playerid, uid)
     	    {
     			if(!Item[uid][Active] && Item[i][Active])
 				{
-  					Tip(playerid, "Mo�esz mie� tylko jedn� bro� aktywn�.");
+  					Tip(playerid, "Możesz mieć tylko jedną broń aktywną.");
 	    			return 1;
 				}
 			}
@@ -86,7 +86,7 @@ stock UseItem(playerid, uid)
 	else if(Item[uid][Type] == 4)
 	{
 	    FreeID[playerid] = uid;
-	    ShowPlayerDialog(playerid, D_ITEM_DISC, DIALOG_STYLE_INPUT, "Tworzenie p�yty � Nazwa", "Wprowad� nazw� p�yty aby przej�� dalej (Bez 'P�yta CD:'):", "Zatwierd�", "Zamknij");
+	    ShowPlayerDialog(playerid, D_ITEM_DISC, DIALOG_STYLE_INPUT, "Tworzenie płyty » Nazwa", "Wprowadź nazwę płyty aby przejść dalej (Bez 'Płyta CD:'):", "Zatwierd�", "Zamknij");
 	}
 	else if(Item[uid][Type] == 5)
 	{
@@ -97,7 +97,7 @@ stock UseItem(playerid, uid)
 		mysql_query(DB_Query);
 
 		new string[64];
-		format(string, sizeof(string), "spo�ywa %s.", Item[uid][Name]);
+		format(string, sizeof(string), "spożywa %s.", Item[uid][Name]);
 		cmd_me(playerid, string);
 
 		Item[uid][UID] = -1;

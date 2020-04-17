@@ -3,27 +3,27 @@ stock ShowLoginDialog(playerid, type)
 	if(type == 1)
 	{
 	    new String[256];
-		format(String, sizeof(String), "Witamy na forgame.pl Roleplay\n\nLogujesz siê na postaæ %s. Poni¿ej wpisz has³o i naciœnij 'Zaloguj'.\n\n(*) Now¹ postaæ mo¿esz za³o¿yæ na naszym forum.\n(*) Mo¿esz zmieniæ postaæ klikaj¹c 'Zmieñ'.", PlayerName(playerid));
+		format(String, sizeof(String), "Witamy na eQualityGaming.pl Roleplay\n\nLogujesz siÄ™ na postaÄ‡ %s. PoniÅ¼ej wpisz hasÅ‚o i naciÅ›nij 'Zaloguj'.\n\n(*) NowÄ… postaÄ‡ moÅ¼esz zaÅ‚oÅ¼yÄ‡ na naszym forum.\n(*) MoÅ¼esz zmieniÄ‡ postaÄ‡ klikajÄ…c 'ZmieÅ„'.", PlayerName(playerid));
 
-		ShowPlayerDialog(playerid, D_LOGIN, DIALOG_STYLE_PASSWORD, "Logowanie", String, "Zaloguj", "Zmieñ");
+		ShowPlayerDialog(playerid, D_LOGIN, DIALOG_STYLE_PASSWORD, "Logowanie", String, "Zaloguj", "ZmieÅ„");
 	}
 	else if(type == 2)
 	{
 	    new String[256];
-		format(String, sizeof(String), "Witamy na forgame.pl Roleplay\n\nNie odnaleziono postaci %s. Poni¿ej wpisz Imie_Nazwisko i naciœnij 'Zmieñ'.\n\n(*) Now¹ postaæ mo¿esz za³o¿yæ na naszym forum.", PlayerName(playerid));
+		format(String, sizeof(String), "Witamy na eQualityGaming.pl Roleplay\n\nNie odnaleziono postaci %s. PoniÅ¼ej wpisz Imie_Nazwisko i naciÅ›nij 'ZmieÅ„'.\n\n(*) NowÄ… postaÄ‡ moÅ¼esz zaÅ‚oÅ¼yÄ‡ na naszym forum.", PlayerName(playerid));
 
-	    ShowPlayerDialog(playerid, D_LOGIN_CN, DIALOG_STYLE_INPUT, "Logowanie » Brak postaci", String, "Zmieñ", "WyjdŸ");
+	    ShowPlayerDialog(playerid, D_LOGIN_CN, DIALOG_STYLE_INPUT, "Logowanie Â» Brak postaci", String, "ZmieÅ„", "WyjdÅº");
 	}
 	else if(type == 3)
 	{
-		ShowPlayerDialog(playerid, D_LOGIN_CN, DIALOG_STYLE_INPUT, "Logowanie » Wybór postaci", "Wpisz poni¿ej 'Imie Nazwisko' postaci.", "Zmieñ", "WyjdŸ");
+		ShowPlayerDialog(playerid, D_LOGIN_CN, DIALOG_STYLE_INPUT, "Logowanie Â» WybÃ³r postaci", "Wpisz poniÅ¼ej 'Imie Nazwisko' postaci.", "ZmieÅ„", "WyjdÅº");
 	}
 	else if(type == 4)
 	{
 	    new String[256];
-		format(String, sizeof(String), "Witamy na forgame.pl Roleplay\n\nPostaæ %s na któr¹ próbujesz siê zalogowaæ jest zablokowana b¹dŸ uœmiercona.\nPoni¿ej wpisz Imie_Nazwisko i naciœnij 'Zmieñ'.\n\n(*) Now¹ postaæ mo¿esz za³o¿yæ na naszym forum.", PlayerName(playerid));
+		format(String, sizeof(String), "Witamy na eQualityGaming.pl Roleplay\n\nPostaÄ‡ %s na ktÃ³rÄ… prÃ³bujesz siÄ™ zalogowaÄ‡ jest zablokowana bÄ…dÅº uÅ›miercona.\nPoniÅ¼ej wpisz Imie_Nazwisko i naciÅ›nij 'ZmieÅ„'.\n\n(*) NowÄ… postaÄ‡ moÅ¼esz zaÅ‚oÅ¼yÄ‡ na naszym forum.", PlayerName(playerid));
 
-	    ShowPlayerDialog(playerid, D_LOGIN_CN, DIALOG_STYLE_INPUT, "Logowanie » B³¹d", String, "Zmieñ", "WyjdŸ");
+	    ShowPlayerDialog(playerid, D_LOGIN_CN, DIALOG_STYLE_INPUT, "Logowanie Â» BÅ‚Ä…d", String, "ZmieÅ„", "WyjdÅº");
 	}
 	return true;
 }

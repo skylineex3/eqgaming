@@ -21,6 +21,6 @@ stock LoadObjects()
 
 	mysql_free_result();
 
-	printf("[load][object] Za≥adowano %d obiektÛw.", loaded);
+	printf("[load][object] Za≈Çadowano %d obiekt√≥w.", loaded);
 	return 1;
 }
