@@ -921,7 +921,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				if(PlayerData[playerid][char_premium] > gettime())
 				{
 					new String[128];
-					format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). {FFD700}Posiadasz konto premium. Ekipa Forgame życzy miłej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
+					format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). {FFD700}Posiadasz konto premium. Ekipa eQualityGaming życzy miłej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
     				SendClientMessage(playerid, 0xC32F1AFF, String);
 
     				SetPlayerColor(playerid, 0xFFD700FF);
@@ -931,7 +931,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				else
 				{
 				    new String[128];
-					format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). Ekipa Forgame życzy miłej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
+					format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). Ekipa eQualityGaming życzy miłej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
     				SendClientMessage(playerid, 0xC32F1AFF, String);
 
     				SetPlayerColor(playerid, 0xFFFFFF00);
@@ -986,9 +986,38 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		else
 		{
-		    Kick(playerid);
+			new str[1000], data[1000], surname[32], uid;
+			mysql_query("SELECT * FROM `rp_surnames`");
+			mysql_store_result();
+
+			while(mysql_fetch_row_format(data, "|"))
+			{
+				sscanf(data, "p<|>ds[32]", uid, surname);
+				format(str, sizeof(str), "%s\n%s", str, surname);
+			}
+
+			mysql_free_result();
+
+		    ShowPlayerDialog(playerid, D_CREATE_CHAR, DIALOG_STYLE_LIST, "Tworzenie postaci", str, "Kobieta", "Mężczyzna");
 		}
 	}
+
+	if(dialogid == D_CREATE_CHAR)
+	{
+		if(response)
+		{
+			new str[128];
+			format(str, sizeof(str), "Wybrałeś nazwisko %s, płeć Kobieta.", inputtext);
+			SendClientMessage(playerid, -1, str);
+		}
+		else
+		{
+			new str[128];
+			format(str, sizeof(str), "Wybrałeś nazwisko %s, płeć Mężczyzna.", inputtext);
+			SendClientMessage(playerid, -1, str);
+		}
+	}
+
 	if(dialogid == D_ITEMS)
 	{
 		if(response)
