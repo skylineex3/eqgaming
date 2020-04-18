@@ -33,7 +33,7 @@ new Text:LSNews[2], NewsTimer, Text:ForGame, Text:VehicleInfo[MAX_PLAYERS];
 
 main()
 {
-	printf("\n# Projekt eQualityGaming RolePlay zaÅ‚adowano. #\n");
+	printf("\n# Projekt eQualityGaming RolePlay za³adowano. #\n");
 }
 
 #include "modules/Functions/SetPlayerHealthEx.pwn"
@@ -366,7 +366,7 @@ public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
     	GetPlayerPos(playerid, X, Y, Z);
 		if(Vehicle[uid][veh_owner] != PlayerData[playerid][char_uid])
 		{
-			Tip(playerid, "To nie jest TwÃ³j pojazd.");
+			Tip(playerid, "To nie jest Twój pojazd.");
  			SetPlayerPos(playerid, X, Y, Z);
 		}
 
@@ -848,109 +848,217 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		else
 		{
-		    new names[24];
-		    GetPlayerName(playerid, names, sizeof(names));
-
-		    new DB_Query[1000], data[1000], password[64], salt[11];
-			format(DB_Query, sizeof(DB_Query), "SELECT `members_pass_hash`, `members_pass_salt` FROM `members` WHERE `member_id` = %d LIMIT 1", PlayerData[playerid][char_guid]);
-			mysql_query(DB_Query);
-
-			mysql_store_result();
-
-			if(mysql_fetch_row_format(data, "|"))
-			{
-			    sscanf(data, "p<|>s[64]s[11]", password, salt);
-			}
-
-			mysql_free_result();
-
-		    if(!strcmp(HashPassword(inputtext, salt), password, true) && strlen(inputtext) != 0)
+		    if(PlayerData[playerid][char_guid] == 0)
 		    {
-		        format(DB_Query, sizeof(DB_Query), "SELECT * FROM `rp_chars` WHERE `char_name` = '%s' LIMIT 1", names);
+				new DB_Query[1000], name[24], password[64], data[1000];
+				GetPlayerName(playerid, name, sizeof(name));
+				format(DB_Query, sizeof(DB_Query), "SELECT `char_uid`, `global_id`, `char_name`, `char_password` FROM `rp_chars` WHERE `char_name` = '%s' LIMIT 1", name);
 				mysql_query(DB_Query);
-
-		        mysql_store_result();
-
+				mysql_store_result();
+				
 				if(mysql_fetch_row_format(data, "|"))
 				{
-				    sscanf(data, "p<|>dds[24]dfffffdddddddddddddddddddddddddd",
-						PlayerData[playerid][char_uid],
-						PlayerData[playerid][char_guid],
-						PlayerData[playerid][char_name],
-						PlayerData[playerid][char_admin_level],
-						PlayerData[playerid][char_health],
-						PlayerData[playerid][char_last_pos][0],
-						PlayerData[playerid][char_last_pos][1],
-						PlayerData[playerid][char_last_pos][2],
-						PlayerData[playerid][char_last_pos][3],
-						PlayerData[playerid][char_interior],
-						PlayerData[playerid][char_virtual_world],
-						PlayerData[playerid][char_cash],
-						PlayerData[playerid][char_bank],
-						PlayerData[playerid][char_skin],
-						PlayerData[playerid][char_strength],
-						PlayerData[playerid][char_sex],
-						PlayerData[playerid][char_bw],
-						PlayerData[playerid][char_premium],
-						PlayerData[playerid][char_online],
-						PlayerData[playerid][char_score],
-						PlayerData[playerid][char_last_damaged_weapon],
-						PlayerData[playerid][char_body_part_damaged][0],
-						PlayerData[playerid][char_body_part_damaged][1],
-						PlayerData[playerid][char_body_part_damaged][2],
-						PlayerData[playerid][char_body_part_damaged][3],
-						PlayerData[playerid][char_body_part_damaged][4],
-						PlayerData[playerid][char_body_part_damaged][5],
-						PlayerData[playerid][char_body_part_damaged][6],
-						PlayerData[playerid][char_debt],
-						PlayerData[playerid][char_bank_number],
-						PlayerData[playerid][char_weight],
-						PlayerData[playerid][char_height],
-						PlayerData[playerid][char_age],
-						PlayerData[playerid][char_ingame],
-						PlayerData[playerid][char_lastonline]);
+					sscanf(data, "p<|>dds[24]s[64]", PlayerData[playerid][char_uid], PlayerData[playerid][char_guid], PlayerData[playerid][char_name], password);
 				}
-				mysql_free_result();
-				PlayerData[playerid][char_bank_number] += PlayerData[playerid][char_uid];
-
-				SetPlayerName(playerid, PlayerData[playerid][char_name]);
-
-				PlayerData[playerid][char_logged] = true;
-				PlayerData[playerid][char_ingame] = 1;
-
-				if(PlayerData[playerid][char_premium] > gettime())
-				{
-					new String[128];
-					format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). {FFD700}Posiadasz konto premium. Ekipa eQualityGaming Å¼yczy miÅ‚ej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
-    				SendClientMessage(playerid, 0xC32F1AFF, String);
-
-    				SetPlayerColor(playerid, 0xFFD700FF);
-
-    				UpdateNick(playerid);
+				
+				if(strcmp(password, inputtext, false) || strlen(inputtext) == 0)
+		    	{
+		        	ShowLoginDialog(playerid, 1);
+		        	GameTextForPlayer(playerid, "~r~BLEDNE HASLO!", 5000, 4);
+					return 1;
 				}
 				else
 				{
-				    new String[128];
-					format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). Ekipa eQualityGaming Å¼yczy miÅ‚ej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
-    				SendClientMessage(playerid, 0xC32F1AFF, String);
+				    mysql_free_result();
+				    
+				    format(DB_Query, sizeof(DB_Query), "SELECT * FROM `rp_chars` WHERE `char_name` = '%s' LIMIT 1", name);
+					mysql_query(DB_Query);
+					mysql_store_result();
+				
+				    if(mysql_fetch_row_format(data, "|"))
+					{
+				    	sscanf(data, "p<|>dds[24]s[64]dfffffdddddddddddddddddddddddddd",
+							PlayerData[playerid][char_uid],
+							PlayerData[playerid][char_guid],
+							PlayerData[playerid][char_name],
+							password,
+							PlayerData[playerid][char_admin_level],
+							PlayerData[playerid][char_health],
+							PlayerData[playerid][char_last_pos][0],
+							PlayerData[playerid][char_last_pos][1],
+							PlayerData[playerid][char_last_pos][2],
+							PlayerData[playerid][char_last_pos][3],
+							PlayerData[playerid][char_interior],
+							PlayerData[playerid][char_virtual_world],
+							PlayerData[playerid][char_cash],
+							PlayerData[playerid][char_bank],
+							PlayerData[playerid][char_skin],
+							PlayerData[playerid][char_strength],
+							PlayerData[playerid][char_sex],
+							PlayerData[playerid][char_bw],
+							PlayerData[playerid][char_premium],
+							PlayerData[playerid][char_online],
+							PlayerData[playerid][char_score],
+							PlayerData[playerid][char_last_damaged_weapon],
+							PlayerData[playerid][char_body_part_damaged][0],
+							PlayerData[playerid][char_body_part_damaged][1],
+							PlayerData[playerid][char_body_part_damaged][2],
+							PlayerData[playerid][char_body_part_damaged][3],
+							PlayerData[playerid][char_body_part_damaged][4],
+							PlayerData[playerid][char_body_part_damaged][5],
+							PlayerData[playerid][char_body_part_damaged][6],
+							PlayerData[playerid][char_debt],
+							PlayerData[playerid][char_bank_number],
+							PlayerData[playerid][char_weight],
+							PlayerData[playerid][char_height],
+							PlayerData[playerid][char_age],
+							PlayerData[playerid][char_ingame],
+							PlayerData[playerid][char_lastonline]);
+					}
+					mysql_free_result();
+					PlayerData[playerid][char_bank_number] += PlayerData[playerid][char_uid];
 
-    				SetPlayerColor(playerid, 0xFFFFFF00);
+					SetPlayerName(playerid, PlayerData[playerid][char_name]);
 
-    				UpdateNick(playerid);
+					PlayerData[playerid][char_logged] = true;
+					PlayerData[playerid][char_ingame] = 1;
+
+					if(PlayerData[playerid][char_premium] > gettime())
+					{
+						new String[128];
+						format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). {FFD700}Posiadasz konto premium. Ekipa eQualityGaming ¿yczy mi³ej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
+    					SendClientMessage(playerid, 0xC32F1AFF, String);
+
+    					SetPlayerColor(playerid, 0xFFD700FF);
+
+    					UpdateNick(playerid);
+					}
+					else
+					{
+				    	new String[128];
+						format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). Ekipa eQualityGaming ¿yczy mi³ej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
+    					SendClientMessage(playerid, 0xC32F1AFF, String);
+
+    					SetPlayerColor(playerid, 0xFFFFFF00);
+
+    					UpdateNick(playerid);
+					}
+
+					format(DB_Query, sizeof(DB_Query), "UPDATE `rp_chars` SET `char_ingame` = 1 WHERE `global_id` = %d LIMIT 1", PlayerData[playerid][char_guid]);
+					mysql_query(DB_Query);
+
+					SetSpawnInfo(playerid, 255, PlayerData[playerid][char_skin], PlayerData[playerid][char_last_pos][0], PlayerData[playerid][char_last_pos][1], PlayerData[playerid][char_last_pos][2], PlayerData[playerid][char_last_pos][3], 0, 0, 0, 0, 0, 0);
+                	TogglePlayerSpectating(playerid, 0);
+					TogglePlayerControllable(playerid, 1);
 				}
-
-				format(DB_Query, sizeof(DB_Query), "UPDATE `rp_chars` SET `char_ingame` = 1 WHERE `global_id` = %d LIMIT 1", PlayerData[playerid][char_guid]);
-				mysql_query(DB_Query);
-
-				SetSpawnInfo(playerid, 255, PlayerData[playerid][char_skin], PlayerData[playerid][char_last_pos][0], PlayerData[playerid][char_last_pos][1], PlayerData[playerid][char_last_pos][2], PlayerData[playerid][char_last_pos][3], 0, 0, 0, 0, 0, 0);
-                TogglePlayerSpectating(playerid, 0);
-				TogglePlayerControllable(playerid, 1);
 			}
 			else
 			{
-			    ShowLoginDialog(playerid, 1);
-		        GameTextForPlayer(playerid, "~r~BLEDNE HASLO!", 5000, 4);
-				return 1;
+		    	new names[24];
+		    	GetPlayerName(playerid, names, sizeof(names));
+
+		    	new DB_Query[1000], data[1000], password[64], salt[11];
+				format(DB_Query, sizeof(DB_Query), "SELECT `members_pass_hash`, `members_pass_salt` FROM `members` WHERE `member_id` = %d LIMIT 1", PlayerData[playerid][char_guid]);
+				mysql_query(DB_Query);
+
+				mysql_store_result();
+
+				if(mysql_fetch_row_format(data, "|"))
+				{
+			    	sscanf(data, "p<|>s[64]s[11]", password, salt);
+				}
+
+				mysql_free_result();
+
+		    	if(!strcmp(HashPassword(inputtext, salt), password, true) && strlen(inputtext) != 0)
+		    	{
+		        	format(DB_Query, sizeof(DB_Query), "SELECT * FROM `rp_chars` WHERE `char_name` = '%s' LIMIT 1", names);
+					mysql_query(DB_Query);
+
+		        	mysql_store_result();
+
+					if(mysql_fetch_row_format(data, "|"))
+					{
+				    	sscanf(data, "p<|>dds[24]s[64]dfffffdddddddddddddddddddddddddd",
+							PlayerData[playerid][char_uid],
+							PlayerData[playerid][char_guid],
+							PlayerData[playerid][char_name],
+							password,
+							PlayerData[playerid][char_admin_level],
+							PlayerData[playerid][char_health],
+							PlayerData[playerid][char_last_pos][0],
+							PlayerData[playerid][char_last_pos][1],
+							PlayerData[playerid][char_last_pos][2],
+							PlayerData[playerid][char_last_pos][3],
+							PlayerData[playerid][char_interior],
+							PlayerData[playerid][char_virtual_world],
+							PlayerData[playerid][char_cash],
+							PlayerData[playerid][char_bank],
+							PlayerData[playerid][char_skin],
+							PlayerData[playerid][char_strength],
+							PlayerData[playerid][char_sex],
+							PlayerData[playerid][char_bw],
+							PlayerData[playerid][char_premium],
+							PlayerData[playerid][char_online],
+							PlayerData[playerid][char_score],
+							PlayerData[playerid][char_last_damaged_weapon],
+							PlayerData[playerid][char_body_part_damaged][0],
+							PlayerData[playerid][char_body_part_damaged][1],
+							PlayerData[playerid][char_body_part_damaged][2],
+							PlayerData[playerid][char_body_part_damaged][3],
+							PlayerData[playerid][char_body_part_damaged][4],
+							PlayerData[playerid][char_body_part_damaged][5],
+							PlayerData[playerid][char_body_part_damaged][6],
+							PlayerData[playerid][char_debt],
+							PlayerData[playerid][char_bank_number],
+							PlayerData[playerid][char_weight],
+							PlayerData[playerid][char_height],
+							PlayerData[playerid][char_age],
+							PlayerData[playerid][char_ingame],
+							PlayerData[playerid][char_lastonline]);
+					}
+					mysql_free_result();
+					PlayerData[playerid][char_bank_number] += PlayerData[playerid][char_uid];
+
+					SetPlayerName(playerid, PlayerData[playerid][char_name]);
+
+					PlayerData[playerid][char_logged] = true;
+					PlayerData[playerid][char_ingame] = 1;
+
+					if(PlayerData[playerid][char_premium] > gettime())
+					{
+						new String[128];
+						format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). {FFD700}Posiadasz konto premium. Ekipa eQualityGaming ¿yczy mi³ej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
+    					SendClientMessage(playerid, 0xC32F1AFF, String);
+
+    					SetPlayerColor(playerid, 0xFFD700FF);
+
+    					UpdateNick(playerid);
+					}
+					else
+					{
+				    	new String[128];
+						format(String, sizeof(String), "Witaj, %s (GUID: %d, UID: %d, ID: %d). Ekipa eQualityGaming ¿yczy mi³ej gry!", PlayerName(playerid), PlayerData[playerid][char_guid], PlayerData[playerid][char_uid], playerid);
+    					SendClientMessage(playerid, 0xC32F1AFF, String);
+
+    					SetPlayerColor(playerid, 0xFFFFFF00);
+
+    					UpdateNick(playerid);
+					}
+
+					format(DB_Query, sizeof(DB_Query), "UPDATE `rp_chars` SET `char_ingame` = 1 WHERE `global_id` = %d LIMIT 1", PlayerData[playerid][char_guid]);
+					mysql_query(DB_Query);
+
+					SetSpawnInfo(playerid, 255, PlayerData[playerid][char_skin], PlayerData[playerid][char_last_pos][0], PlayerData[playerid][char_last_pos][1], PlayerData[playerid][char_last_pos][2], PlayerData[playerid][char_last_pos][3], 0, 0, 0, 0, 0, 0);
+                	TogglePlayerSpectating(playerid, 0);
+					TogglePlayerControllable(playerid, 1);
+				}
+				else
+				{
+			    	ShowLoginDialog(playerid, 1);
+		        	GameTextForPlayer(playerid, "~r~BLEDNE HASLO!", 5000, 4);
+					return 1;
+				}
 			}
 		}
 	}
@@ -998,7 +1106,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			mysql_free_result();
 
-		    ShowPlayerDialog(playerid, D_CREATE_CHAR, DIALOG_STYLE_LIST, "Tworzenie postaci", str, "Kobieta", "MÄ™Å¼czyzna");
+		    ShowPlayerDialog(playerid, D_CREATE_CHAR, DIALOG_STYLE_LIST, "Tworzenie postaci", str, "Kobieta", "Mê¿czyzna");
 		}
 	}
 
@@ -1006,15 +1114,107 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 		if(response)
 		{
-			new str[128];
-			format(str, sizeof(str), "WybraÅ‚eÅ› nazwisko %s, pÅ‚eÄ‡ Kobieta.", inputtext);
-			SendClientMessage(playerid, -1, str);
+			PlayerData[playerid][char_sex] = 1;
+			format(PlayerData[playerid][char_name], 24, "%s", inputtext);
+			
+			new str[1000], data[1000], name[24], uid, sex;
+			mysql_query("SELECT * FROM `rp_firstnames` WHERE `name_sex` = 1");
+			mysql_store_result();
+			
+			while(mysql_fetch_row_format(data, "|"))
+			{
+			    sscanf(data, "p<|>ds[24]d", uid, name, sex);
+			    format(str, sizeof(str), "%s\n%s", str, name);
+			}
+			
+			mysql_free_result();
+			
+			ShowPlayerDialog(playerid, D_CREATE_CHAR2, DIALOG_STYLE_LIST, "Tworzenie postaci", str, "Stwórz", "Anuluj");
 		}
 		else
 		{
-			new str[128];
-			format(str, sizeof(str), "WybraÅ‚eÅ› nazwisko %s, pÅ‚eÄ‡ MÄ™Å¼czyzna.", inputtext);
-			SendClientMessage(playerid, -1, str);
+			PlayerData[playerid][char_sex] = 0;
+			format(PlayerData[playerid][char_name], 24, "%s", inputtext);
+
+			new str[1000], data[1000], name[24], uid, sex;
+			mysql_query("SELECT * FROM `rp_firstnames` WHERE `name_sex` = 0");
+			mysql_store_result();
+
+			while(mysql_fetch_row_format(data, "|"))
+			{
+			    sscanf(data, "p<|>ds[24]d", uid, name, sex);
+			    format(str, sizeof(str), "%s\n%s", str, name);
+			}
+
+			mysql_free_result();
+
+			ShowPlayerDialog(playerid, D_CREATE_CHAR2, DIALOG_STYLE_LIST, "Tworzenie postaci", str, "Stwórz", "Anuluj");
+		}
+	}
+	
+	if(dialogid == D_CREATE_CHAR2)
+	{
+	    if(response)
+	    {
+	        new name[24];
+	        format(name, sizeof(name), "%s_%s", inputtext, PlayerData[playerid][char_name]);
+			SetPlayerName(playerid, name);
+			
+			format(PlayerData[playerid][char_name], 24, "%s", name);
+			
+			new DB_Query[256];
+			format(DB_Query, sizeof(DB_Query), "SELECT `global_id` FROM `rp_chars` WHERE `char_name` = '%s' LIMIT 1", name);
+			mysql_query(DB_Query);
+			
+			mysql_store_result();
+			if(mysql_num_rows() != 0)
+		 	{
+		 	    Tip(playerid, "Postaæ pod tym imieniem i nazwiskiem ju¿ istnieje, spróbuj stworzyæ inn¹.");
+		 	    
+		 	    new str[64];
+		 	    format(str, sizeof(str), "Niezalogowany_%d", playerid);
+		 	    SetPlayerName(playerid, str);
+		 	    
+		 	    format(PlayerData[playerid][char_name], 24, "%s", PlayerName(playerid));
+	 			TryLogin(playerid);
+	 			mysql_free_result();
+	 			return 1;
+			}
+			mysql_free_result();
+	    
+	        ShowPlayerDialog(playerid, D_CREATE_CHAR3, DIALOG_STYLE_INPUT, "Tworzenie postaci", "Wed³ug wzoru, wpisz wiek, wagê, wzrost postaci oraz has³o dostêpu:\n\n(*) Przyk³ad: 22 70 195 testowe\nPostaæ ma 22 lata, wa¿y 70kg i ma 195cm wzrostu a has³em dostêpu jest: 'testowe'.", "Stwórz", "Anuluj");
+		}
+		else
+		{
+		    format(PlayerData[playerid][char_name], 24, "%s", PlayerName(playerid));
+			TryLogin(playerid);
+		}
+	}
+	
+	if(dialogid == D_CREATE_CHAR3)
+	{
+	    if(response)
+	    {
+	        new wiek, waga, wzrost, haslo[32];
+	        if(sscanf(inputtext, "p< >ddds[32]", wiek, waga, wzrost, haslo)) return ShowPlayerDialog(playerid, D_CREATE_CHAR3, DIALOG_STYLE_INPUT, "Tworzenie postaci", "Wed³ug wzoru, wpisz wiek, wagê, wzrost postaci oraz has³o dostêpu:\n\n(*) Przyk³ad: 22 70 195 testowe\nPostaæ ma 22 lata, wa¿y 70kg i ma 195cm wzrostu a has³em dostêpu jest: 'testowe'.", "Stwórz", "Anuluj");
+			
+			PlayerData[playerid][char_age] = wiek;
+			PlayerData[playerid][char_weight] = waga;
+			PlayerData[playerid][char_height] = wzrost;
+			
+			new DB_Query[1200];
+			format(DB_Query, sizeof(DB_Query), "INSERT INTO `rp_chars` (`char_uid`, `global_id`, `char_name`, `char_password`, `char_admin_level`, `char_health`, `char_last_pos_x`, `char_last_pos_y`, `char_last_pos_z`, `char_last_pos_a`, `char_interior`, `char_virtual_world`, `char_cash`, `char_bank`, `char_skin`, `char_strength`, `char_sex`, `char_bw`, `char_premium`, `char_online`, `char_score`, `char_last_damaged_weapon`, `char_bodypart_damaged_torso`, `char_bodypart_damaged_groin`, `char_bodypart_damaged_leftarm`, `char_bodypart_damaged_rightarm`, `char_bodypart_damaged_leftleg`, `char_bodypart_damaged_rightleg`, `char_bodypart_damaged_head`, `char_debt`, `char_bank_number`, `char_weight`, `char_height`, `char_age`, `char_ingame`, `char_lastonline`) VALUES (NULL, '0', '%s', '%s', '0', '100', '0', '0', '0', '0', '0', '0', '100', '75', '1', '3000', '%d', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1000000000', '%d', '%d', '%d', '0', '0')",
+			    PlayerData[playerid][char_name], haslo, PlayerData[playerid][char_sex], PlayerData[playerid][char_weight], PlayerData[playerid][char_height], PlayerData[playerid][char_age]);
+			mysql_query(DB_Query);
+			
+			Tip(playerid, "Postaæ zosta³a pomyœlnie utworzona. Zaloguj siê u¿ywaj¹c has³a które poda³eœ wczeœniej.");
+			
+			TryLogin(playerid);
+		}
+		else
+		{
+			format(PlayerData[playerid][char_name], 24, "%s", PlayerName(playerid));
+		    TryLogin(playerid);
 		}
 	}
 
@@ -1052,26 +1252,26 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			switch(listitem)
 			{
 			    case 0:{ /*nothing*/ }
-			    case 1:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 2:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 3:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 4:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 5:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 6:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 7:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 8:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 9:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 10:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 11:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 12:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 13:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 14:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 15:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 16:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 17:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 18:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 19:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
-				case 20:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty Â» Opcje", "ID\tOpcja\n0\tOdÅ‚Ã³Å¼ przedmiot", "Wybierz", "Cofnij"); }
+			    case 1:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 2:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 3:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 4:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 5:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 6:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 7:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 8:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 9:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 10:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 11:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 12:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 13:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 14:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 15:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 16:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 17:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 18:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 19:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
+				case 20:{ FreeID[playerid] = strval(inputtext[0]), ShowPlayerDialog(playerid, D_ITEM_OPTIONS, DIALOG_STYLE_TABLIST_HEADERS, "Przedmioty » Opcje", "ID\tOpcja\n0\tOd³ó¿ przedmiot", "Wybierz", "Cofnij"); }
 			}
 		}
 	}
@@ -1090,7 +1290,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		        {
 		            new uid = FreeID[playerid];
 
-		            if(Item[uid][Active]) return Info(playerid, "Ten przedmiot nie moÅ¼e byÄ‡ aktywny.");
+		            if(Item[uid][Active]) return Info(playerid, "Ten przedmiot nie mo¿e byæ aktywny.");
 
 		            if(IsPlayerInAnyVehicle(playerid))
 		            {
@@ -1099,7 +1299,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 						FreeID[playerid] = -1;
 
-						cmd_me(playerid, "odkÅ‚ada jakiÅ› przedmiot w pojeÅºdzie.");
+						cmd_me(playerid, "odk³ada jakiœ przedmiot w pojeŸdzie.");
 						return 1;
 					}
 
@@ -1113,7 +1313,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 		            FreeID[playerid] = -1;
 
-		            cmd_me(playerid, "odkÅ‚ada jakiÅ› przedmiot.");
+		            cmd_me(playerid, "odk³ada jakiœ przedmiot.");
 				}
 			}
 		}
@@ -1125,14 +1325,14 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 			new uid = strval(inputtext[0]);
 
-			if(Item[uid][Owner] != 0 && Item[uid][Owner] != PlayerData[playerid][char_uid]) return Info(playerid, "Nie moÅ¼esz podnieÅ›Ä‡ tego przedmiotu.");
+			if(Item[uid][Owner] != 0 && Item[uid][Owner] != PlayerData[playerid][char_uid]) return Info(playerid, "Nie mo¿esz podnieœæ tego przedmiotu.");
 
 			if(Item[uid][in_vehicle] != 0 && IsPlayerInAnyVehicle(playerid))
 			{
    				Item[uid][Owner] = PlayerData[playerid][char_uid];
 			    Item[uid][in_vehicle] = 0;
 
-			    cmd_me(playerid, "podnosi jakiÅ› przedmiot ze schowka w pojeÅºdzie.");
+			    cmd_me(playerid, "podnosi jakiœ przedmiot ze schowka w pojeŸdzie.");
 			    return 1;
 			}
 
@@ -1141,7 +1341,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			Item[uid][item_pos][1] = 0;
 			Item[uid][item_pos][2] = 0;
 
-			cmd_me(playerid, "podnosi jakiÅ› przedmiot z ziemi.");
+			cmd_me(playerid, "podnosi jakiœ przedmiot z ziemi.");
 		}
 	}
 
@@ -1151,15 +1351,15 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 			switch(listitem)
 			{
-			    case 0:{ ShowPlayerDialog(playerid, D_CT_CHANGE_NAME, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu Â» Zmiana nazwy", "Podaj nowÄ… nazwÄ™ przedmiotu:", "ZmieÅ„", "Cofnij"); }
-			    case 1:{ ShowPlayerDialog(playerid, D_CT_CHANGE_TYPE, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu Â» Zmiana typu", "Podaj typ przedmiotu:", "ZmieÅ„", "Cofnij"); }
-			    case 2:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_1, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu Â» Zmiana wartoÅ›ci (1)", "Podaj nowÄ… wartoÅ›Ä‡ (1):", "ZmieÅ„", "Cofnij"); }
-			    case 3:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_2, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu Â» Zmiana wartoÅ›ci (2)", "Podaj nowÄ… wartoÅ›Ä‡ (2):", "ZmieÅ„", "Cofnij"); }
-			    case 4:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_3, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu Â» Zmiana wartoÅ›ci (3)", "Podaj nowÄ… wartoÅ›Ä‡ (3):", "ZmieÅ„", "Cofnij"); }
-			    case 5:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_4, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu Â» Zmiana wartoÅ›ci (4)", "Podaj nowÄ… wartoÅ›Ä‡ (4):", "ZmieÅ„", "Cofnij"); }
-			    case 6:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_5, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu Â» Zmiana wartoÅ›ci (5)", "Podaj nowÄ… wartoÅ›Ä‡ (5):", "ZmieÅ„", "Cofnij"); }
-			    case 7:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_6, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu Â» Zmiana wartoÅ›ci (6)", "Podaj nowÄ… wartoÅ›Ä‡ (6):", "ZmieÅ„", "Cofnij"); }
-				case 8:{ ShowPlayerDialog(playerid, D_CT_CHANGE_OWNER, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu Â» Zmiana ownera", "Podaj UID postaci aby nadaÄ‡ ownera:", "ZmieÅ„", "Cofnij"); }
+			    case 0:{ ShowPlayerDialog(playerid, D_CT_CHANGE_NAME, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu » Zmiana nazwy", "Podaj now¹ nazwê przedmiotu:", "Zmieñ", "Cofnij"); }
+			    case 1:{ ShowPlayerDialog(playerid, D_CT_CHANGE_TYPE, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu » Zmiana typu", "Podaj typ przedmiotu:", "Zmieñ", "Cofnij"); }
+			    case 2:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_1, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu » Zmiana wartoœci (1)", "Podaj now¹ wartoœæ (1):", "Zmieñ", "Cofnij"); }
+			    case 3:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_2, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu » Zmiana wartoœci (2)", "Podaj now¹ wartoœæ (2):", "Zmieñ", "Cofnij"); }
+			    case 4:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_3, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu » Zmiana wartoœci (3)", "Podaj now¹ wartoœæ (3):", "Zmieñ", "Cofnij"); }
+			    case 5:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_4, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu » Zmiana wartoœci (4)", "Podaj now¹ wartoœæ (4):", "Zmieñ", "Cofnij"); }
+			    case 6:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_5, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu » Zmiana wartoœci (5)", "Podaj now¹ wartoœæ (5):", "Zmieñ", "Cofnij"); }
+			    case 7:{ ShowPlayerDialog(playerid, D_CT_CHANGE_VAR_6, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu » Zmiana wartoœci (6)", "Podaj now¹ wartoœæ (6):", "Zmieñ", "Cofnij"); }
+				case 8:{ ShowPlayerDialog(playerid, D_CT_CHANGE_OWNER, DIALOG_STYLE_INPUT, "Tworzenie przedmiotu » Zmiana ownera", "Podaj UID postaci aby nadaæ ownera:", "Zmieñ", "Cofnij"); }
 				case 9:
 				{
 				    new uid = FreeID[playerid];
@@ -1172,7 +1372,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 				    FreeID[playerid] = -1;
 
-				    Tip(playerid, "Przedmiot zostaÅ‚ utworzony.");
+				    Tip(playerid, "Przedmiot zosta³ utworzony.");
 				}
 			}
 		}
@@ -1184,10 +1384,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 		else
 		{
@@ -1195,10 +1395,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    format(Item[uid][Name], 64, "%s", inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1208,10 +1408,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 		else
 		{
@@ -1219,10 +1419,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Item[uid][Type] = strval(inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1232,10 +1432,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 		else
 		{
@@ -1243,10 +1443,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Item[uid][Var][0] = strval(inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1256,10 +1456,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 		else
 		{
@@ -1267,10 +1467,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Item[uid][Var][1] = strval(inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1280,10 +1480,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 		else
 		{
@@ -1291,10 +1491,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Item[uid][Var][2] = strval(inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1304,10 +1504,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 		else
 		{
@@ -1315,10 +1515,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Item[uid][Var][3] = strval(inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1328,10 +1528,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 		else
 		{
@@ -1339,10 +1539,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Item[uid][Var][4] = strval(inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1352,10 +1552,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 		else
 		{
@@ -1363,10 +1563,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Item[uid][Var][5] = strval(inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1376,10 +1576,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 		else
 		{
@@ -1387,10 +1587,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Item[uid][Owner] = strval(inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoÅ›Ä‡ (1):\t%d\nWartoÅ›Ä‡ (2):\t%d\nWartoÅ›Ä‡ (3):\t%d\n\
-				WartoÅ›Ä‡ (4):\t%d\nWartoÅ›Ä‡ (5):\t%d\nWartoÅ›Ä‡ (6):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nNazwa przedmiotu:\t%s\nTyp przedmiotu:\t%d\nWartoœæ (1):\t%d\nWartoœæ (2):\t%d\nWartoœæ (3):\t%d\n\
+				Wartoœæ (4):\t%d\nWartoœæ (5):\t%d\nWartoœæ (6):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz przedmiot", Item[uid][Name], Item[uid][Type], Item[uid][Var][0], Item[uid][Var][1], Item[uid][Var][2], Item[uid][Var][3], Item[uid][Var][4], Item[uid][Var][5], Item[uid][Owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_ITEM, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie przedmiotu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1450,11 +1650,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        switch(listitem)
 	        {
-	            case 0:{ ShowPlayerDialog(playerid, D_VEHICLE_CN, DIALOG_STYLE_INPUT, "Tworzenie pojazdu Â» Zmiana pojazdu", "Podaj nowÄ… nazwÄ™ pojazdu:", "ZmieÅ„", "Cofnij"); }
-	            case 1:{ ShowPlayerDialog(playerid, D_VEHICLE_CHP, DIALOG_STYLE_INPUT, "Tworzenie pojazdu Â» Zmiana HP", "Podaj nowÄ… wartoÅ›Ä‡ HP pojazdu:", "ZmieÅ„", "Cofnij"); }
-	            case 2:{ ShowPlayerDialog(playerid, D_VEHICLE_CK1, DIALOG_STYLE_INPUT, "Tworzenie pojazdu Â» Zmiana koloru (1)", "Podaj nowy kolor pojazdu (1):", "ZmieÅ„", "Cofnij"); }
-	            case 3:{ ShowPlayerDialog(playerid, D_VEHICLE_CK2, DIALOG_STYLE_INPUT, "Tworzenie pojazdu Â» Zmiana koloru (2)", "Podaj nowy kolor pojazdu (2):", "ZmieÅ„", "Cofnij"); }
-	            case 4:{ ShowPlayerDialog(playerid, D_VEHICLE_CO, DIALOG_STYLE_INPUT, "Tworzenie pojazdu Â» Zmiana ownera", "Podaj UID postaci ktÃ³ra ma byÄ‡ wÅ‚aÅ›cicielem pojazdu:", "ZmieÅ„", "Cofnij"); }
+	            case 0:{ ShowPlayerDialog(playerid, D_VEHICLE_CN, DIALOG_STYLE_INPUT, "Tworzenie pojazdu » Zmiana pojazdu", "Podaj now¹ nazwê pojazdu:", "Zmieñ", "Cofnij"); }
+	            case 1:{ ShowPlayerDialog(playerid, D_VEHICLE_CHP, DIALOG_STYLE_INPUT, "Tworzenie pojazdu » Zmiana HP", "Podaj now¹ wartoœæ HP pojazdu:", "Zmieñ", "Cofnij"); }
+	            case 2:{ ShowPlayerDialog(playerid, D_VEHICLE_CK1, DIALOG_STYLE_INPUT, "Tworzenie pojazdu » Zmiana koloru (1)", "Podaj nowy kolor pojazdu (1):", "Zmieñ", "Cofnij"); }
+	            case 3:{ ShowPlayerDialog(playerid, D_VEHICLE_CK2, DIALOG_STYLE_INPUT, "Tworzenie pojazdu » Zmiana koloru (2)", "Podaj nowy kolor pojazdu (2):", "Zmieñ", "Cofnij"); }
+	            case 4:{ ShowPlayerDialog(playerid, D_VEHICLE_CO, DIALOG_STYLE_INPUT, "Tworzenie pojazdu » Zmiana ownera", "Podaj UID postaci która ma byæ w³aœcicielem pojazdu:", "Zmieñ", "Cofnij"); }
 	            case 5:
 	            {
 	                new uid = FreeID[playerid];
@@ -1484,10 +1684,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 			return 1;
 		}
 
@@ -1497,10 +1697,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Vehicle[uid][veh_model] = GetVehicleModelIDFromName(inputtext);
 
 		    new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1510,10 +1710,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 			return 1;
 		}
 
@@ -1523,10 +1723,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        Vehicle[uid][veh_health] = strval(inputtext);
 
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1536,10 +1736,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 			return 1;
 		}
 
@@ -1549,10 +1749,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        Vehicle[uid][veh_color][0] = strval(inputtext);
 
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1562,10 +1762,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 			return 1;
 		}
 
@@ -1575,10 +1775,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        Vehicle[uid][veh_color][1] = strval(inputtext);
 
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1588,10 +1788,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        new uid = FreeID[playerid];
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 			return 1;
 		}
 
@@ -1601,10 +1801,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        Vehicle[uid][veh_owner] = strval(inputtext);
 
 	        new StrinG[1000];
-			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoÅ›ci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdÅº, stwÃ³rz pojazd",
+			format(StrinG, sizeof(StrinG), "Ustawienia\tWartoœci\nPojazd:\t%s(ID: %d)\nHP:\t%.1f\nKolor (1):\t%d\nKolor (2):\t%d\nOwner:\t%d\nZatwierdŸ, stwórz pojazd",
 				VehicleNames[Vehicle[uid][veh_model] - 400], Vehicle[uid][veh_model], Vehicle[uid][veh_health], Vehicle[uid][veh_color][0], Vehicle[uid][veh_color][1], Vehicle[uid][veh_owner]);
 
-			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdÅº", "Anuluj");
+			ShowPlayerDialog(playerid, D_CREATE_VEHICLE, DIALOG_STYLE_TABLIST_HEADERS, "Tworzenie pojazdu", StrinG, "ZatwierdŸ", "Anuluj");
 		}
 	}
 
@@ -1613,9 +1813,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    if(response)
 		{
 			new uid = FreeID[playerid];
-			format(Item[uid][Name], 64, "PÅ‚yta CD: %s", inputtext);
+			format(Item[uid][Name], 64, "P³yta CD: %s", inputtext);
 
-		    ShowPlayerDialog(playerid, D_ITEM_DISC2, DIALOG_STYLE_INPUT, "Tworzenie pÅ‚yty Â» Link", "WprowadÅº link do audio streama by nagraÄ‡ pÅ‚ytÄ™:", "StwÃ³rz", "Zamknij");
+		    ShowPlayerDialog(playerid, D_ITEM_DISC2, DIALOG_STYLE_INPUT, "Tworzenie p³yty » Link", "WprowadŸ link do audio streama by nagraæ p³ytê:", "Stwórz", "Zamknij");
 		}
 	}
 
@@ -1629,7 +1829,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 
 			FreeID[playerid] = -1;
 
-			Tip(playerid, "PÅ‚yta zostaÅ‚a stworzona.");
+			Tip(playerid, "P³yta zosta³a stworzona.");
 		}
 	}
 
@@ -1641,10 +1841,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        {
 	            case 0:{ return cmd_area(playerid, ""); }
 	            case 1:{ return cmd_area(playerid, ""); }
-	            case 2:{ ShowPlayerDialog(playerid, D_AREA_CHANGE_OWNER, DIALOG_STYLE_INPUT, "Strefa Â» Zmiana wÅ‚aÅ›ciciela", "WprowadÅº UID postaci ktÃ³ra ma byÄ‡ nowym wÅ‚aÅ›cicielem:", "ZatwierdÅº", "Cofnij"); }
-				case 3:{ ShowPlayerDialog(playerid, D_AREA_CHANGE_HOUSE_COST, DIALOG_STYLE_INPUT, "Strefa Â» Zmiana ceny budynku mieszkalnego", "WprowadÅº cenÄ™ (bez $) dla budynkÃ³w mieszkalnych:", "ZatwierdÅº", "Cofnij"); }
-				case 4:{ ShowPlayerDialog(playerid, D_AREA_CHANGE_BUISNESS_COST, DIALOG_STYLE_INPUT, "Strefa Â» Zmiana ceny budynku biznesowego", "WprowadÅº cenÄ™ (bez $) dla budynkÃ³w biznesowych:", "ZatwierdÅº", "Cofnij"); }
-				case 5:{ ShowPlayerDialog(playerid, D_AREA_CHANGE_SIZE, DIALOG_STYLE_INPUT, "Strefa Â» Zmiana metraÅ¼u dla budynkÃ³w", "WprowadÅº nowy metraÅ¼ ktÃ³ry bÄ™dzie minimalnym metraÅ¼em dla budynkÃ³w:", "ZatwierdÅº", "Cofnij"); }
+	            case 2:{ ShowPlayerDialog(playerid, D_AREA_CHANGE_OWNER, DIALOG_STYLE_INPUT, "Strefa » Zmiana w³aœciciela", "WprowadŸ UID postaci która ma byæ nowym w³aœcicielem:", "ZatwierdŸ", "Cofnij"); }
+				case 3:{ ShowPlayerDialog(playerid, D_AREA_CHANGE_HOUSE_COST, DIALOG_STYLE_INPUT, "Strefa » Zmiana ceny budynku mieszkalnego", "WprowadŸ cenê (bez $) dla budynków mieszkalnych:", "ZatwierdŸ", "Cofnij"); }
+				case 4:{ ShowPlayerDialog(playerid, D_AREA_CHANGE_BUISNESS_COST, DIALOG_STYLE_INPUT, "Strefa » Zmiana ceny budynku biznesowego", "WprowadŸ cenê (bez $) dla budynków biznesowych:", "ZatwierdŸ", "Cofnij"); }
+				case 5:{ ShowPlayerDialog(playerid, D_AREA_CHANGE_SIZE, DIALOG_STYLE_INPUT, "Strefa » Zmiana metra¿u dla budynków", "WprowadŸ nowy metra¿ który bêdzie minimalnym metra¿em dla budynków:", "ZatwierdŸ", "Cofnij"); }
 			}
 		}
 		else
@@ -1726,45 +1926,45 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			    case 0:
 			    {
 			        new StrinG[500];
-					format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+					format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
 			    	ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 				}
-				case 1:{ ShowPlayerDialog(playerid, D_BANK_WPLAC, DIALOG_STYLE_INPUT, "Bankomat Â» WpÅ‚ata pieniÄ™dzy", "WprowadÅº kwotÄ™ jakÄ… chcesz wpÅ‚aciÄ‡ na swoje konto bankowe:", "ZatwierdÅº", "Cofnij"); }
+				case 1:{ ShowPlayerDialog(playerid, D_BANK_WPLAC, DIALOG_STYLE_INPUT, "Bankomat » Wp³ata pieniêdzy", "WprowadŸ kwotê jak¹ chcesz wp³aciæ na swoje konto bankowe:", "ZatwierdŸ", "Cofnij"); }
 				case 2:
 				{
 				    if(PlayerData[playerid][char_debt] != 0)
 				    {
-				        Tip(playerid, "Konto zablokowane. Najpierw spÅ‚aÄ‡ swoje naleÅ¼noÅ›ci!");
+				        Tip(playerid, "Konto zablokowane. Najpierw sp³aæ swoje nale¿noœci!");
 				        new StrinG[500];
-						format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+						format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
 			    		ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 						return 1;
 					}
-					ShowPlayerDialog(playerid, D_BANK_WYPLAC, DIALOG_STYLE_INPUT, "Bankomat Â» WypÅ‚ata pieniÄ™dzy", "WprowadÅº kwotÄ™ jakÄ… chcesz wypÅ‚aciÄ‡ z bankomatu:", "ZatwierdÅº", "Cofnij");
+					ShowPlayerDialog(playerid, D_BANK_WYPLAC, DIALOG_STYLE_INPUT, "Bankomat » Wyp³ata pieniêdzy", "WprowadŸ kwotê jak¹ chcesz wyp³aciæ z bankomatu:", "ZatwierdŸ", "Cofnij");
 				}
 				case 3:
 				{
 				    if(PlayerData[playerid][char_debt] != 0)
 				    {
-				        Tip(playerid, "Konto zablokowane. Najpierw spÅ‚aÄ‡ swoje naleÅ¼noÅ›ci!");
+				        Tip(playerid, "Konto zablokowane. Najpierw sp³aæ swoje nale¿noœci!");
 				        new StrinG[500];
-						format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+						format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
 			    		ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 						return 1;
 					}
-					ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat Â» Przelew na inne konto", "WprowadÅº numer konta oraz kwotÄ™ wedÅ‚ug przykÅ‚adu: 3050432 500", "ZatwierdÅº", "Cofnij");
+					ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat » Przelew na inne konto", "WprowadŸ numer konta oraz kwotê wed³ug przyk³adu: 3050432 500", "ZatwierdŸ", "Cofnij");
 				}
 				case 4:
 				{
 				    if(PlayerData[playerid][char_debt] == 0)
 				    {
-				        Tip(playerid, "Nie posiadasz Å¼adnych naleÅ¼noÅ›ci.");
+				        Tip(playerid, "Nie posiadasz ¿adnych nale¿noœci.");
 				        new StrinG[500];
-						format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+						format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
 			    		ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 						return 1;
 					}
-					ShowPlayerDialog(playerid, D_BANK_DEBT, DIALOG_STYLE_LIST, "Bankomat Â» SpÅ‚ata naleÅ¼noÅ›ci", "test", "ZatwierdÅº", "Cofnij");
+					ShowPlayerDialog(playerid, D_BANK_DEBT, DIALOG_STYLE_LIST, "Bankomat » Sp³ata nale¿noœci", "test", "ZatwierdŸ", "Cofnij");
 				}
 			}
 		}
@@ -1774,20 +1974,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 	    if(response)
 	    {
-	        if(!IsNumeric(inputtext)) return ShowPlayerDialog(playerid, D_BANK_WPLAC, DIALOG_STYLE_INPUT, "Bankomat Â» WpÅ‚ata pieniÄ™dzy", "WprowadÅº kwotÄ™ jakÄ… chcesz wpÅ‚aciÄ‡ na swoje konto bankowe:", "ZatwierdÅº", "Cofnij");
+	        if(!IsNumeric(inputtext)) return ShowPlayerDialog(playerid, D_BANK_WPLAC, DIALOG_STYLE_INPUT, "Bankomat » Wp³ata pieniêdzy", "WprowadŸ kwotê jak¹ chcesz wp³aciæ na swoje konto bankowe:", "ZatwierdŸ", "Cofnij");
 	        if(PlayerData[playerid][char_cash] < strval(inputtext))
 	        {
-	            Tip(playerid, "Nie posiadasz wystarczajÄ…cej iloÅ›ci gotÃ³wki przy sobie.");
+	            Tip(playerid, "Nie posiadasz wystarczaj¹cej iloœci gotówki przy sobie.");
 
-	            ShowPlayerDialog(playerid, D_BANK_WPLAC, DIALOG_STYLE_INPUT, "Bankomat Â» WpÅ‚ata pieniÄ™dzy", "WprowadÅº kwotÄ™ jakÄ… chcesz wpÅ‚aciÄ‡ na swoje konto bankowe:", "ZatwierdÅº", "Cofnij");
+	            ShowPlayerDialog(playerid, D_BANK_WPLAC, DIALOG_STYLE_INPUT, "Bankomat » Wp³ata pieniêdzy", "WprowadŸ kwotê jak¹ chcesz wp³aciæ na swoje konto bankowe:", "ZatwierdŸ", "Cofnij");
 	            return 1;
 			}
 
 			if(strval(inputtext) < 0 || strval(inputtext) > 1500000)
 			{
-			    Tip(playerid, "Wpisano niepoprawnÄ… kwotÄ™.");
+			    Tip(playerid, "Wpisano niepoprawn¹ kwotê.");
 
-			    ShowPlayerDialog(playerid, D_BANK_WPLAC, DIALOG_STYLE_INPUT, "Bankomat Â» WpÅ‚ata pieniÄ™dzy", "WprowadÅº kwotÄ™ jakÄ… chcesz wpÅ‚aciÄ‡ na swoje konto bankowe:", "ZatwierdÅº", "Cofnij");
+			    ShowPlayerDialog(playerid, D_BANK_WPLAC, DIALOG_STYLE_INPUT, "Bankomat » Wp³ata pieniêdzy", "WprowadŸ kwotê jak¹ chcesz wp³aciæ na swoje konto bankowe:", "ZatwierdŸ", "Cofnij");
 			    return 1;
 			}
 
@@ -1795,13 +1995,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        PlayerData[playerid][char_bank] += strval(inputtext);
 
 	        new StrinG[500];
-			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
   			ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 		}
 		else
 		{
 		    new StrinG[500];
-			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
   			ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 		}
 	}
@@ -1810,20 +2010,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	{
 	    if(response)
 	    {
-	        if(!IsNumeric(inputtext)) return ShowPlayerDialog(playerid, D_BANK_WYPLAC, DIALOG_STYLE_INPUT, "Bankomat Â» WypÅ‚ata pieniÄ™dzy", "WprowadÅº kwotÄ™ jakÄ… chcesz wypÅ‚aciÄ‡ z bankomatu:", "ZatwierdÅº", "Cofnij");
+	        if(!IsNumeric(inputtext)) return ShowPlayerDialog(playerid, D_BANK_WYPLAC, DIALOG_STYLE_INPUT, "Bankomat » Wyp³ata pieniêdzy", "WprowadŸ kwotê jak¹ chcesz wyp³aciæ z bankomatu:", "ZatwierdŸ", "Cofnij");
             if(PlayerData[playerid][char_bank] < strval(inputtext))
 	        {
-	            Tip(playerid, "Nie posiadasz wystarczajÄ…cej iloÅ›ci gotÃ³wki na koncie.");
+	            Tip(playerid, "Nie posiadasz wystarczaj¹cej iloœci gotówki na koncie.");
 
-	            ShowPlayerDialog(playerid, D_BANK_WYPLAC, DIALOG_STYLE_INPUT, "Bankomat Â» WypÅ‚ata pieniÄ™dzy", "WprowadÅº kwotÄ™ jakÄ… chcesz wypÅ‚aciÄ‡ z bankomatu:", "ZatwierdÅº", "Cofnij");
+	            ShowPlayerDialog(playerid, D_BANK_WYPLAC, DIALOG_STYLE_INPUT, "Bankomat » Wyp³ata pieniêdzy", "WprowadŸ kwotê jak¹ chcesz wyp³aciæ z bankomatu:", "ZatwierdŸ", "Cofnij");
 	            return 1;
 			}
 
 			if(strval(inputtext) < 0 || strval(inputtext) > 1500000)
 			{
-			    Tip(playerid, "Wpisano niepoprawnÄ… kwotÄ™.");
+			    Tip(playerid, "Wpisano niepoprawn¹ kwotê.");
 
-			    ShowPlayerDialog(playerid, D_BANK_WYPLAC, DIALOG_STYLE_INPUT, "Bankomat Â» WypÅ‚ata pieniÄ™dzy", "WprowadÅº kwotÄ™ jakÄ… chcesz wypÅ‚aciÄ‡ z bankomatu:", "ZatwierdÅº", "Cofnij");
+			    ShowPlayerDialog(playerid, D_BANK_WYPLAC, DIALOG_STYLE_INPUT, "Bankomat » Wyp³ata pieniêdzy", "WprowadŸ kwotê jak¹ chcesz wyp³aciæ z bankomatu:", "ZatwierdŸ", "Cofnij");
 			    return 1;
 			}
 
@@ -1831,13 +2031,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        PlayerData[playerid][char_bank] -= strval(inputtext);
 
 	        new StrinG[500];
-			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
   			ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 		}
 		else
 		{
 		    new StrinG[500];
-			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
   			ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 		}
 	}
@@ -1849,7 +2049,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        new acnum, amount;
 			if(sscanf(inputtext, "p< >dd", acnum, amount))
 			{
-			    ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat Â» Przelew na inne konto", "WprowadÅº numer konta oraz kwotÄ™ wedÅ‚ug przykÅ‚adu: 3050432 500", "ZatwierdÅº", "Cofnij");
+			    ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat » Przelew na inne konto", "WprowadŸ numer konta oraz kwotê wed³ug przyk³adu: 3050432 500", "ZatwierdŸ", "Cofnij");
 			    return 1;
 			}
 			else
@@ -1871,23 +2071,23 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 			    	Tip(playerid, "Podany numer konta bankowego nie istnieje.");
 
-			    	ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat Â» Przelew na inne konto", "WprowadÅº numer konta oraz kwotÄ™ wedÅ‚ug przykÅ‚adu: 3050432 500", "ZatwierdÅº", "Cofnij");
+			    	ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat » Przelew na inne konto", "WprowadŸ numer konta oraz kwotê wed³ug przyk³adu: 3050432 500", "ZatwierdŸ", "Cofnij");
   					return 1;
 				}
 
 				if(PlayerData[playerid][char_bank] < amount)
 	        	{
-	            	Tip(playerid, "Nie posiadasz wystarczajÄ…cej iloÅ›ci gotÃ³wki na koncie.");
+	            	Tip(playerid, "Nie posiadasz wystarczaj¹cej iloœci gotówki na koncie.");
 
-	            	ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat Â» Przelew na inne konto", "WprowadÅº numer konta oraz kwotÄ™ wedÅ‚ug przykÅ‚adu: 3050432 500", "ZatwierdÅº", "Cofnij");
+	            	ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat » Przelew na inne konto", "WprowadŸ numer konta oraz kwotê wed³ug przyk³adu: 3050432 500", "ZatwierdŸ", "Cofnij");
 	            	return 1;
 				}
 
 				if(amount < 0 || amount > 1500000)
 				{
-			    	Tip(playerid, "Wpisano niepoprawnÄ… kwotÄ™.");
+			    	Tip(playerid, "Wpisano niepoprawn¹ kwotê.");
 
-			    	ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat Â» Przelew na inne konto", "WprowadÅº numer konta oraz kwotÄ™ wedÅ‚ug przykÅ‚adu: 3050432 500", "ZatwierdÅº", "Cofnij");
+			    	ShowPlayerDialog(playerid, D_BANK_PRZELEW, DIALOG_STYLE_INPUT, "Bankomat » Przelew na inne konto", "WprowadŸ numer konta oraz kwotê wed³ug przyk³adu: 3050432 500", "ZatwierdŸ", "Cofnij");
 			    	return 1;
 				}
 
@@ -1895,18 +2095,18 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				PlayerData[player][char_bank] += amount;
 
 				new str[128];
-				format(str, sizeof(str), "OtrzymaÅ‚eÅ› przelew z numeru konta %d. DostÄ™pne Å›rodki: $%d", PlayerData[playerid][char_bank_number], PlayerData[player][char_bank]);
+				format(str, sizeof(str), "Otrzyma³eœ przelew z numeru konta %d. Dostêpne œrodki: $%d", PlayerData[playerid][char_bank_number], PlayerData[player][char_bank]);
 				Tip(player, str);
 
          		new StrinG[500];
-				format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+				format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
   				ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 			}
 		}
 		else
 		{
 		    new StrinG[500];
-			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
   			ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 		}
 	}
@@ -1917,13 +2117,13 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    {
 	        //do zrobienia
 	        new StrinG[500];
-			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
   			ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 		}
 		else
 		{
 		    new StrinG[500];
-			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+			format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
   			ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 		}
 	}
@@ -1944,7 +2144,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					    SetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, VEHICLE_PARAMS_OFF, boot, objective);
 
 					    new str[64];
-					    format(str, sizeof(str), "zamyka maskÄ™ w pojeÅºdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
+					    format(str, sizeof(str), "zamyka maskê w pojeŸdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
 					    cmd_me(playerid, str);
 					}
 					else
@@ -1952,7 +2152,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					    SetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, VEHICLE_PARAMS_ON, boot, objective);
 
 					    new str[64];
-					    format(str, sizeof(str), "otwiera maskÄ™ w pojeÅºdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
+					    format(str, sizeof(str), "otwiera maskê w pojeŸdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
 					    cmd_me(playerid, str);
 					}
 	            }
@@ -1963,7 +2163,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	                    SetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, VEHICLE_PARAMS_OFF, objective);
 
 					    new str[64];
-					    format(str, sizeof(str), "zamyka bagaÅ¼nik w pojeÅºdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
+					    format(str, sizeof(str), "zamyka baga¿nik w pojeŸdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
 					    cmd_me(playerid, str);
 					}
 					else
@@ -1971,7 +2171,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						SetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, VEHICLE_PARAMS_ON, objective);
 
 					    new str[64];
-					    format(str, sizeof(str), "otwiera bagaÅ¼nik w pojeÅºdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
+					    format(str, sizeof(str), "otwiera baga¿nik w pojeŸdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
 					    cmd_me(playerid, str);
 					}
 				}
@@ -1995,7 +2195,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				        SetVehicleParamsCarWindows(vehicleid, 1, 1, 1, 1);
 
 				        new str[64];
-					    format(str, sizeof(str), "zamyka szyby w pojeÅºdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
+					    format(str, sizeof(str), "zamyka szyby w pojeŸdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
 					    cmd_me(playerid, str);
 				    }
 				    else if(driver == 1 && passenger == 1)
@@ -2003,7 +2203,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				        SetVehicleParamsCarWindows(vehicleid, 0, 0, 1, 1);
 
 				        new str[64];
-					    format(str, sizeof(str), "otwiera szyby w pojeÅºdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
+					    format(str, sizeof(str), "otwiera szyby w pojeŸdzie %s", VehicleNames[GetVehicleModel(vehicleid) - 400]);
 					    cmd_me(playerid, str);
 				    }
 				}
@@ -2026,9 +2226,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 
 					if(!strlen(list_players))
-					    Info(playerid, "W pobliÅ¼u Twojej postaci nie znaleziono Å¼adnych graczy.");
+					    Info(playerid, "W pobli¿u Twojej postaci nie znaleziono ¿adnych graczy.");
 				    else
-				    	ShowPlayerDialog(playerid, D_VEHICLE_SELL, DIALOG_STYLE_LIST, "Lista osÃ³b w pobliÅ¼u", list_players, "Wybierz", "Cofnij");
+				    	ShowPlayerDialog(playerid, D_VEHICLE_SELL, DIALOG_STYLE_LIST, "Lista osób w pobli¿u", list_players, "Wybierz", "Cofnij");
 				}
 				case 6:
 				{
@@ -2045,9 +2245,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 
 					if(!strlen(list_players))
-					    Info(playerid, "W pobliÅ¼u Twojej postaci nie znaleziono Å¼adnych graczy.");
+					    Info(playerid, "W pobli¿u Twojej postaci nie znaleziono ¿adnych graczy.");
 					else
-					    ShowPlayerDialog(playerid, D_VEHICLE_GIVE, DIALOG_STYLE_LIST, "Lista osÃ³b w pobliÅ¼u", list_players, "Wybierz", "Cofnij");
+					    ShowPlayerDialog(playerid, D_VEHICLE_GIVE, DIALOG_STYLE_LIST, "Lista osób w pobli¿u", list_players, "Wybierz", "Cofnij");
 				}
 			}
 		}
@@ -2062,11 +2262,11 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        new id = strval(inputtext[0]);
 
 	        new str[500];
-	        format(str, sizeof(str), "Oferta sprzedaÅ¼y pojazdu\nKupujÄ…cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\n\nWpisz kwotÄ™ za ktÃ³rÄ… chcesz sprzedaÄ‡ pojazd i kliknij \"Sprzedaj\".", PlayerData[id][char_name], id, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel]);
+	        format(str, sizeof(str), "Oferta sprzeda¿y pojazdu\nKupuj¹cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\n\nWpisz kwotê za któr¹ chcesz sprzedaæ pojazd i kliknij \"Sprzedaj\".", PlayerData[id][char_name], id, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel]);
 
 	        PlayerData[playerid][char_offer_id] = id;
 
-			ShowPlayerDialog(playerid, D_VEHICLE_SELL2, DIALOG_STYLE_INPUT, "SprzedaÅ¼ pojazdu", str, "Sprzedaj", "Anuluj");
+			ShowPlayerDialog(playerid, D_VEHICLE_SELL2, DIALOG_STYLE_INPUT, "Sprzeda¿ pojazdu", str, "Sprzedaj", "Anuluj");
 		}
 
 		if(!response)
@@ -2086,7 +2286,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			GameTextForPlayer(playerid, "~g~Oferta zostala wyslana!", 5000, 4);
 
 			new str[500];
-	        format(str, sizeof(str), "Oferta kupno pojazdu\nSprzedajÄ…cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\nCena: $%d\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziÄ‡ kupno pojazdu.", PlayerData[playerid][char_name], playerid, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel], strval(inputtext[0]));
+	        format(str, sizeof(str), "Oferta kupno pojazdu\nSprzedaj¹cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\nCena: $%d\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziæ kupno pojazdu.", PlayerData[playerid][char_name], playerid, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel], strval(inputtext[0]));
 
 			ShowPlayerDialog(PlayerData[playerid][char_offer_id], D_VEHICLE_SELL3, DIALOG_STYLE_INPUT, "Kupno pojazdu", str, "Kup", "Anuluj");
 
@@ -2108,7 +2308,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	        	if(PlayerData[playerid][char_cash] < PlayerData[id][char_offer_value])
 	        	{
 	        	    new str[500];
-	        		format(str, sizeof(str), "Oferta kupno pojazdu\nSprzedajÄ…cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\nCena: $%d\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziÄ‡ kupno pojazdu.\n\n{FF0000}Nie posiadasz wystarczajÄ…cej kwoty pieniÄ™dzy przy sobie.", PlayerData[id][char_name], id, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel], PlayerData[id][char_offer_value]);
+	        		format(str, sizeof(str), "Oferta kupno pojazdu\nSprzedaj¹cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\nCena: $%d\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziæ kupno pojazdu.\n\n{FF0000}Nie posiadasz wystarczaj¹cej kwoty pieniêdzy przy sobie.", PlayerData[id][char_name], id, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel], PlayerData[id][char_offer_value]);
 
 					ShowPlayerDialog(playerid, D_VEHICLE_SELL3, DIALOG_STYLE_INPUT, "Kupno pojazdu", str, "Kup", "Anuluj");
 					return 1;
@@ -2131,7 +2331,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			else
 			{
 			    new str[500];
-	        	format(str, sizeof(str), "Oferta kupno pojazdu\nSprzedajÄ…cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\nCena: $%d\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziÄ‡ kupno pojazdu.\n\n{FF0000}Nie wpisano w okienku \"potwierdzam\".", PlayerData[id][char_name], id, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel], PlayerData[id][char_offer_value]);
+	        	format(str, sizeof(str), "Oferta kupno pojazdu\nSprzedaj¹cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\nCena: $%d\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziæ kupno pojazdu.\n\n{FF0000}Nie wpisano w okienku \"potwierdzam\".", PlayerData[id][char_name], id, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel], PlayerData[id][char_offer_value]);
 
 				ShowPlayerDialog(playerid, D_VEHICLE_SELL3, DIALOG_STYLE_INPUT, "Kupno pojazdu", str, "Kup", "Anuluj");
 			}
@@ -2154,7 +2354,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		if(response)
 		{
 			new str[500], id = strval(inputtext[0]), vehicleid = GetPlayerVehicleID(playerid), uid = GetVehicleUID(vehicleid);
- 			format(str, sizeof(str), "Oferta przekazania pojazdu\nPrzekazujÄ…cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziÄ‡ przekazanie pojazdu.", PlayerData[playerid][char_name], playerid, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel]);
+ 			format(str, sizeof(str), "Oferta przekazania pojazdu\nPrzekazuj¹cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziæ przekazanie pojazdu.", PlayerData[playerid][char_name], playerid, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel]);
 
 			ShowPlayerDialog(id, D_VEHICLE_GIVE2, DIALOG_STYLE_INPUT, "Przekazanie pojazdu", str, "Odbierz", "Anuluj");
 
@@ -2188,7 +2388,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			else
 			{
 			    new str[500], vehicleid = GetPlayerVehicleID(playerid), uid = GetVehicleUID(vehicleid);
- 				format(str, sizeof(str), "Oferta przekazania pojazdu\nPrzekazujÄ…cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziÄ‡ przekazanie pojazdu.\n\n{FF0000}Nie wpisano w okienku \"potwierdzam\".", PlayerData[playerid][char_name], playerid, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel]);
+ 				format(str, sizeof(str), "Oferta przekazania pojazdu\nPrzekazuj¹cy: %s (ID: %d)\nPrzebieg: %.1f\nPaliwo: %.1f\n\nW okienku wpisz \"potwierdzam\" aby zatwierdziæ przekazanie pojazdu.\n\n{FF0000}Nie wpisano w okienku \"potwierdzam\".", PlayerData[playerid][char_name], playerid, Vehicle[uid][veh_mileage], Vehicle[uid][veh_fuel]);
 
 				ShowPlayerDialog(playerid, D_VEHICLE_GIVE2, DIALOG_STYLE_INPUT, "Przekazanie pojazdu", str, "Odbierz", "Anuluj");
 			}
@@ -2201,7 +2401,7 @@ public OnPlayerText(playerid, text[])
 {
 	if(PlayerData[playerid][char_bw] > 0)
 	{
-	    Info(playerid, "W tej chwili nie moÅ¼esz korzystaÄ‡ z czatÃ³w InCharacter.");
+	    Info(playerid, "W tej chwili nie mo¿esz korzystaæ z czatów InCharacter.");
 	    return 0;
 	}
 
@@ -2219,7 +2419,7 @@ public OnPlayerText(playerid, text[])
 	{
 	    if(PlayerData[playerid][char_block_ooc] != 0)
 	    {
-	        Info(playerid, "Posiadasz aktywnÄ… blokadÄ™ czatÃ³w OOC.");
+	        Info(playerid, "Posiadasz aktywn¹ blokadê czatów OOC.");
 	        return 0;
 		}
 
@@ -2230,7 +2430,7 @@ public OnPlayerText(playerid, text[])
 
     if(text[0] == '?')
 	{
-		cmd_me(playerid, "robi pytajacÄ… minÄ™.");
+		cmd_me(playerid, "robi pytajac¹ minê.");
 	    return 0;
 	}
 
@@ -2282,7 +2482,7 @@ public OnPlayerText(playerid, text[])
 	}
 	else
 	{
-		format(string, sizeof string, "%s mÃ³wi: %s%s", PlayerName(playerid), string, ((kropki+pytajniki+wykrzykniki == 0 ? (".") : (""))) );
+		format(string, sizeof string, "%s mówi: %s%s", PlayerName(playerid), string, ((kropki+pytajniki+wykrzykniki == 0 ? (".") : (""))) );
 		SendWrappedMessageToPlayerRange(playerid, COLOR_SAY_FADE1, COLOR_SAY_FADE2, COLOR_SAY_FADE3, COLOR_SAY_FADE4, COLOR_SAY_FADE5, string, 10, MAX_LINE);
 	}
 	return 0;
@@ -2407,7 +2607,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			format(str, sizeof(str), "~y~Strefa ~w~%s ~y~UID: ~w~%d~n~~y~Teraz idz do punktu ~w~North East ~y~i kliknij ~w~Y ~y~aby zaznaczyc pozycje.", Zone[uid][z_name], Zone[uid][z_uid]);
 			InfoTD(playerid, str);
 
-	    	Tip(playerid, "Pozycja zostaÅ‚a zapisana.");
+	    	Tip(playerid, "Pozycja zosta³a zapisana.");
 		}
 		else if(PlayerData[playerid][char_stage] == STAGE_ZONE_SET_Y)
 		{
@@ -2428,14 +2628,14 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 			PlayerData[playerid][char_info_timer] = 8;
 
-	        Tip(playerid, "Pozycja zostaÅ‚a zapisana.");
+	        Tip(playerid, "Pozycja zosta³a zapisana.");
 		}
 
 		if(GetNearestObject(playerid, 3.0) != -1)
 		{
 		    if(PlayerData[playerid][char_bw] != 0)
 			{
-				Info(playerid, "Nie moÅ¼esz teraz skorzystaÄ‡ z tej komendy.");
+				Info(playerid, "Nie mo¿esz teraz skorzystaæ z tej komendy.");
 				return 1;
 			}
 			new objectid = GetNearestObject(playerid, 3.0);
@@ -2443,7 +2643,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			if(Object[uid][object_model] == 2942 || Object[uid][object_model] == 2754)
 			{
 			    new StrinG[500];
-				format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}WpÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}WypÅ‚aÄ‡ gotÃ³wkÄ™\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}SpÅ‚aÄ‡ naleÅ¼noÅ›ci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
+				format(StrinG, sizeof(StrinG), "{CCCCCC}Stan konta {FFFFFF}({00FF00}${FFFFFF}%d)\n{CCCCCC}Wp³aæ gotówkê\n{CCCCCC}Wyp³aæ gotówkê\n{CCCCCC}Wykonaj przelew na konto\n{CCCCCC}Sp³aæ nale¿noœci {FFFFFF}({00FF00}${FFFFFF}%d)", PlayerData[playerid][char_bank], PlayerData[playerid][char_debt]);
 			    ShowPlayerDialog(playerid, D_BANK, DIALOG_STYLE_LIST, "Bankomat", StrinG, "Wybierz", "Anuluj");
 			}
 		}
@@ -2465,7 +2665,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 
 			PlayerData[playerid][char_info_timer] = 8;
 
-	        Tip(playerid, "Strefa zostaÅ‚a zapisana w bazie danych.");
+	        Tip(playerid, "Strefa zosta³a zapisana w bazie danych.");
 		}
 	}
 
@@ -2565,7 +2765,7 @@ stock LoadObjectMmat()
 
  	mysql_free_result();
 
-	printf("[load][mmat] ZaÅ‚adowano %d tekstur i %d tekstÃ³w na obiekcie.", loadedo, loadedt);
+	printf("[load][mmat] Za³adowano %d tekstur i %d tekstów na obiekcie.", loadedo, loadedt);
 	return 1;
 }
 
@@ -2610,3 +2810,4 @@ stock GetNearestObject(playerid, Float:distance)
     }
     return retElement;
 }
+
