@@ -118,6 +118,8 @@
 #define D_VEHICLE_GIVE                  143
 #define D_VEHICLE_GIVE2                 144
 #define D_CREATE_CHAR					145
+#define D_CREATE_CHAR2					146
+#define D_CREATE_CHAR3					147
 
 #define MAX_LINE 						120
 #define MAX_ITEMS                       500

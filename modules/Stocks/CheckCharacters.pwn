@@ -8,9 +8,9 @@ stock CheckCharacters(givenString[])
 		&& givenString[i] != 'i' && givenString[i] != 'o' && givenString[i] != 'p' && givenString[i] != 'a' && givenString[i] != 's' && givenString[i] != 'd' && givenString[i] != 'f'
 		 && givenString[i] != 'g' && givenString[i] != 'h' && givenString[i] != 'j' && givenString[i] != 'k' && givenString[i] != 'l' && givenString[i] != 'z' && givenString[i] != 'x'
 		  && givenString[i] != 'c' && givenString[i] != 'v' && givenString[i] != 'b' && givenString[i] != 'n' && givenString[i] != 'm' && givenString[i] != ',' && givenString[i] != '.'
-		   && givenString[i] != '!' && givenString[i] != '?' && givenString[i] != 'ƒô' && givenString[i] != '√≥' && givenString[i] != 'ƒÖ' && givenString[i] != '≈õ' && givenString[i] != '≈Ç'
-		    && givenString[i] != '≈º' && givenString[i] != '≈∫' && givenString[i] != 'ƒá' && givenString[i] != '≈Ñ' && givenString[i] != 'ƒò' && givenString[i] != '√ì' && givenString[i] != 'ƒÑ'
-			 && givenString[i] != '≈ö' && givenString[i] != '≈Å' && givenString[i] != '≈ª' && givenString[i] != '≈π' && givenString[i] != 'ƒÜ' && givenString[i] != '≈É' && givenString[i] != ' '
+		   && givenString[i] != '!' && givenString[i] != '?' && givenString[i] != 'Í' && givenString[i] != 'Û' && givenString[i] != 'π' && givenString[i] != 'ú' && givenString[i] != '≥'
+		    && givenString[i] != 'ø' && givenString[i] != 'ü' && givenString[i] != 'Ê' && givenString[i] != 'Ò' && givenString[i] != ' ' && givenString[i] != '”' && givenString[i] != '•'
+			 && givenString[i] != 'å' && givenString[i] != '£' && givenString[i] != 'Ø' && givenString[i] != 'è' && givenString[i] != '∆' && givenString[i] != '—' && givenString[i] != ' '
 			  && givenString[i] != '1' && givenString[i] != '2' && givenString[i] != '3' && givenString[i] != '4' && givenString[i] != '5' && givenString[i] != '6' && givenString[i] != '7'
 			   && givenString[i] != '8' && givenString[i] != '9' && givenString[i] != '0' && givenString[i] != '-' && givenString[i] != '(' && givenString[i] != ')' && givenString[i] != '['
 			    && givenString[i] != ']')

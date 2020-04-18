@@ -2,7 +2,7 @@ stock UseItem(playerid, uid)
 {
 	if(Item[uid][Type] == 0)
 	{
-	    Tip(playerid, "Ten przedmiot nie posiada Å¼adnej funkcji skryptowej.");
+	    Tip(playerid, "Ten przedmiot nie posiada ¿adnej funkcji skryptowej.");
 	}
     else if(Item[uid][Type] == 1)
 	{
@@ -12,7 +12,7 @@ stock UseItem(playerid, uid)
     	    {
     			if(!Item[uid][Active] && Item[i][Active])
 				{
-  					Tip(playerid, "MoÅ¼esz mieÄ‡ tylko jednÄ… broÅ„ aktywnÄ….");
+  					Tip(playerid, "Mo¿esz mieæ tylko jedn¹ broñ aktywn¹.");
 	    			return 1;
 				}
 			}
@@ -86,7 +86,7 @@ stock UseItem(playerid, uid)
 	else if(Item[uid][Type] == 4)
 	{
 	    FreeID[playerid] = uid;
-	    ShowPlayerDialog(playerid, D_ITEM_DISC, DIALOG_STYLE_INPUT, "Tworzenie pÅ‚yty Â» Nazwa", "WprowadÅº nazwÄ™ pÅ‚yty aby przejÅ›Ä‡ dalej (Bez 'PÅ‚yta CD:'):", "Zatwierdï¿½", "Zamknij");
+	    ShowPlayerDialog(playerid, D_ITEM_DISC, DIALOG_STYLE_INPUT, "Tworzenie p³yty » Nazwa", "WprowadŸ nazwê p³yty aby przejœæ dalej (Bez 'P³yta CD:'):", "Zatwierd?", "Zamknij");
 	}
 	else if(Item[uid][Type] == 5)
 	{
@@ -97,7 +97,7 @@ stock UseItem(playerid, uid)
 		mysql_query(DB_Query);
 
 		new string[64];
-		format(string, sizeof(string), "spoÅ¼ywa %s.", Item[uid][Name]);
+		format(string, sizeof(string), "spo¿ywa %s.", Item[uid][Name]);
 		cmd_me(playerid, string);
 
 		Item[uid][UID] = -1;
@@ -134,3 +134,4 @@ stock UseItem(playerid, uid)
 	}
 	return 1;
 }
+

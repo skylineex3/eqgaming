@@ -19,6 +19,7 @@ stock LoadItems()
 
 	mysql_free_result();
 
-	printf("[load][item] Za≈Çadowano %d przedmiot√≥w.", i);
+	printf("[load][item] Za≥adowano %d przedmiotÛw.", i);
 	return 1;
 }
+

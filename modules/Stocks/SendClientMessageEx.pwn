@@ -14,7 +14,7 @@ stock SendClientMessageEx(Float:range, playerid, message[], col1, col2, col3, co
 		if(echo == true && i == playerid) continue;
    		if(PlayerData[i][char_bw] != 0)
 	 	{
-   			SendClientMessage(i, 0xCCCCCCFF, "** Twoja postac jest nieprzytomna, wiÄ™c nie sÅ‚yszysz gÅ‚osu innych osÃ³b **");
+   			SendClientMessage(i, 0xCCCCCCFF, "** Twoja postac jest nieprzytomna, wiêc nie s³yszysz g³osu innych osób **");
 	     	continue;
 	 	}
 
@@ -31,3 +31,4 @@ stock SendClientMessageEx(Float:range, playerid, message[], col1, col2, col3, co
 	}
 	return 1;
 }
+

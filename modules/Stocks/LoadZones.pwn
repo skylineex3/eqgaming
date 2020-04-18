@@ -17,6 +17,7 @@ stock LoadZones()
 
 	mysql_free_result();
 
-	printf("[load][zones] Za≈Çadowano %d stref.", i);
+	printf("[load][zones] Za≥adowano %d stref.", i);
 	return 1;
 }
+

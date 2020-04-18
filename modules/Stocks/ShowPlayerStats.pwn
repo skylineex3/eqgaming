@@ -39,16 +39,17 @@ stock ShowPlayerStats(playerid, id)
 	if(PlayerData[id][char_inside_doors] != 0)
 	{
 		new StrinG[2500];
-		format(StrinG, sizeof(StrinG), "{CCCCCC}Czas gry:\t{FFFFFF}%dh %02dmin\n{CCCCCC}Energia:\t{FFFFFF}%.0f%%\n{CCCCCC}BW:\t{FFFFFF}%d sek.\n{CCCCCC}SiÅ‚a:\t{FFFFFF}%dj\n{CCCCCC}GotÃ³wka:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Bank:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Numer konta:\t{FFFFFF}%d\n{CCCCCC}Drzwi:\t{FFFFFF}%s (UID: %d)\n{CCCCCC}Skin:\t{FFFFFF}%d (domyÅ›lny %d)\n{CCCCCC}Strefa:\t{FFFFFF}%s (UID: %d)\n{FFD700}Premium:\t{FFFFFF}%s",
+		format(StrinG, sizeof(StrinG), "{CCCCCC}Czas gry:\t{FFFFFF}%dh %02dmin\n{CCCCCC}Energia:\t{FFFFFF}%.0f%%\n{CCCCCC}BW:\t{FFFFFF}%d sek.\n{CCCCCC}Si³a:\t{FFFFFF}%dj\n{CCCCCC}Gotówka:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Bank:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Numer konta:\t{FFFFFF}%d\n{CCCCCC}Drzwi:\t{FFFFFF}%s (UID: %d)\n{CCCCCC}Skin:\t{FFFFFF}%d (domyœlny %d)\n{CCCCCC}Strefa:\t{FFFFFF}%s (UID: %d)\n{FFD700}Premium:\t{FFFFFF}%s",
 			online_hours, online_minutes, PlayerData[id][char_health], PlayerData[id][char_bw], PlayerData[id][char_strength], PlayerData[id][char_cash], PlayerData[id][char_bank], PlayerData[id][char_bank_number], Doors[PlayerData[id][char_inside_doors]][Name], PlayerData[id][char_inside_doors], GetPlayerSkin(id), PlayerData[id][char_skin], zname, uid, premtime);
 		ShowPlayerDialog(playerid, D_STATS, DIALOG_STYLE_TABLIST, str, StrinG, "Wybierz", "Zamknij");
 	}
 	else
 	{
 	    new StrinG[2500];
-		format(StrinG, sizeof(StrinG), "{CCCCCC}Czas gry:\t{FFFFFF}%dh %02dmin\n{CCCCCC}Energia:\t{FFFFFF}%.0f%%\n{CCCCCC}BW:\t{FFFFFF}%d sek.\n{CCCCCC}SiÅ‚a:\t{FFFFFF}%dj\n{CCCCCC}GotÃ³wka:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Bank:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Numer konta:\t{FFFFFF}%d\n{CCCCCC}Drzwi:\t{FFFFFF}Brak (UID: %d)\n{CCCCCC}Skin:\t{FFFFFF}%d (domyÅ›lny %d)\n{CCCCCC}Strefa:\t{FFFFFF}%s (UID: %d)\n{FFD700}Premium:\t{FFFFFF}%s",
+		format(StrinG, sizeof(StrinG), "{CCCCCC}Czas gry:\t{FFFFFF}%dh %02dmin\n{CCCCCC}Energia:\t{FFFFFF}%.0f%%\n{CCCCCC}BW:\t{FFFFFF}%d sek.\n{CCCCCC}Si³a:\t{FFFFFF}%dj\n{CCCCCC}Gotówka:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Bank:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Numer konta:\t{FFFFFF}%d\n{CCCCCC}Drzwi:\t{FFFFFF}Brak (UID: %d)\n{CCCCCC}Skin:\t{FFFFFF}%d (domyœlny %d)\n{CCCCCC}Strefa:\t{FFFFFF}%s (UID: %d)\n{FFD700}Premium:\t{FFFFFF}%s",
 			online_hours, online_minutes, PlayerData[id][char_health], PlayerData[id][char_bw], PlayerData[id][char_strength], PlayerData[id][char_cash], PlayerData[id][char_bank], PlayerData[id][char_bank_number], PlayerData[id][char_inside_doors], GetPlayerSkin(id), PlayerData[id][char_skin], zname, uid, premtime);
 		ShowPlayerDialog(playerid, D_STATS, DIALOG_STYLE_TABLIST, str, StrinG, "Wybierz", "Zamknij");
 	}
 	return 1;
 }
+

@@ -12,8 +12,8 @@ public SecTimer()
 	if(minute == 0 && second == 0)
 	{
 	    new text[64];
-	    if(hour == 0) format(text, sizeof(text), "* Dzwony w ratuszu bijÄ… 24 razy. *");
-	    else format(text, sizeof(text), "* Dzwony w ratuszu bijÄ… %d razy. *", hour);
+	    if(hour == 0) format(text, sizeof(text), "* Dzwony w ratuszu bij¹ 24 razy. *");
+	    else format(text, sizeof(text), "* Dzwony w ratuszu bij¹ %d razy. *", hour);
 		SendClientMessageToAll(COLOR_DO, text);
 
 		SetWorldTime(hour);
@@ -155,7 +155,7 @@ public SecTimer()
 				        Vehicle[uid][veh_fuel] = 0.0;
 
 				        new strr[128];
-				        format(strr, sizeof(strr), "W pojeÅºdzie %s koÅ„czy siÄ™ paliwo.", VehicleNames[GetVehicleModel(vehid) - 400]);
+				        format(strr, sizeof(strr), "W pojeŸdzie %s koñczy siê paliwo.", VehicleNames[GetVehicleModel(vehid) - 400]);
 				        cmd_do(i, strr);
 					}
 				}
@@ -164,3 +164,4 @@ public SecTimer()
 	}
 	return 1;
 }
+

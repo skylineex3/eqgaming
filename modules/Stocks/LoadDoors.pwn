@@ -19,6 +19,7 @@ stock LoadDoors()
 
 	mysql_free_result();
 
-	printf("[load][doors] Za≈Çadowano %d drzwi.", i);
+	printf("[load][doors] Za≥adowano %d drzwi.", i);
 	return 1;
 }
+
