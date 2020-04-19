@@ -31,11 +31,6 @@ new Text:LSNews[2], NewsTimer, Text:ForGame, Text:VehicleInfo[MAX_PLAYERS];
 #include "modules/Enums/zone_enums.pwn"
 #include "modules/Enums/door_enums.pwn"
 
-main()
-{
-	printf("\n# Projekt eQualityGaming RolePlay za³adowano. #\n");
-}
-
 #include "modules/Functions/SetPlayerHealthEx.pwn"
 #include "modules/Functions/GivePlayerHealth.pwn"
 #include "modules/Functions/Log.pwn"
@@ -57,7 +52,6 @@ main()
 #include "modules/Stocks/EscapePL.pwn"
 #include "modules/Stocks/GetPlayerSpeed.pwn"
 #include "modules/Stocks/UpdateNick.pwn"
-#include "modules/Stocks/ShowPlayerStats.pwn"
 #include "modules/Stocks/TeamMessage.pwn"
 #include "modules/Stocks/AdminMessage.pwn"
 #include "modules/Stocks/GetPlayerID.pwn"
@@ -96,6 +90,11 @@ main()
 #include "modules/SecTimer.pwn"
 #include "modules/UnfreezePlayer.pwn"
 #include "modules/EngineStart.pwn"
+
+main()
+{
+	printf("\n# Projekt eQualityGaming RolePlay za³adowano. #\n");
+}
 
 public OnGameModeInit()
 {
@@ -2701,6 +2700,78 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 	return 1;
 }
 
+CMD:stats(playerid, cmdtext[])
+{
+	new id;
+	if(sscanf(cmdtext, "i", id))
+	{
+	    ShowPlayerStats(playerid, playerid);
+	}
+	else
+	{
+		if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 3) return ShowPlayerStats(playerid, playerid);
+    	if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
+
+		ShowPlayerStats(playerid, id);
+	}
+	return 1;
+}
+
+stock ShowPlayerStats(playerid, id)
+{
+	new ip[32];
+	GetPlayerIp(id, ip, sizeof(ip));
+
+    new str[128];
+	format(str, sizeof(str), "%s (ID:%d) (GUID: %d) (UID:%d) (IP:%s)", PlayerData[id][char_name], id, PlayerData[id][char_guid], PlayerData[id][char_uid], ip);
+
+	new online_hours, online_minutes;
+	online_hours = (PlayerData[id][char_online] / 3600);
+	online_minutes = ((PlayerData[id][char_online] - (PlayerData[id][char_online] / 3600) * 3600) / 60);
+
+	new Float:Health;
+	GetPlayerHealth(id, Health);
+
+	new uid = GetPlayerZone(id), zname[32];
+	if(GetPlayerZone(id) != -1)
+	{
+		format(zname, sizeof(zname), "%s", Zone[uid][z_name]);
+	}
+	else
+	{
+	    format(zname, sizeof(zname), "---");
+	    uid = 0;
+	}
+	
+	new premtime[64];
+	if(PlayerData[id][char_premium] > gettime())
+	{
+	    new year, month, day, hour, minute, second;
+		TimestampToDate(PlayerData[id][char_premium], year, month, day, hour, minute, second, 1);
+		format(premtime, sizeof(premtime), "%d/%02d/%d %d:%02d:%02d", day, month, year, hour, minute, second);
+	}
+	else
+	{
+	    format(premtime, sizeof(premtime), "---");
+	}
+
+	if(PlayerData[id][char_inside_doors] != 0)
+	{
+		new StrinG[2500];
+		format(StrinG, sizeof(StrinG), "{CCCCCC}Czas gry:\t{FFFFFF}%dh %02dmin\n{CCCCCC}Energia:\t{FFFFFF}%.0f%%\n{CCCCCC}BW:\t{FFFFFF}%d sek.\n{CCCCCC}Si³a:\t{FFFFFF}%dj\n{CCCCCC}Gotówka:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Bank:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Numer konta:\t{FFFFFF}%d\n{CCCCCC}Drzwi:\t{FFFFFF}%s (UID: %d)\n{CCCCCC}Skin:\t{FFFFFF}%d (domyœlny %d)\n{CCCCCC}Strefa:\t{FFFFFF}%s (UID: %d)\n{FFD700}Premium:\t{FFFFFF}%s",
+			online_hours, online_minutes, PlayerData[id][char_health], PlayerData[id][char_bw], PlayerData[id][char_strength], PlayerData[id][char_cash], PlayerData[id][char_bank], PlayerData[id][char_bank_number], Doors[PlayerData[id][char_inside_doors]][Name], PlayerData[id][char_inside_doors], GetPlayerSkin(id), PlayerData[id][char_skin], zname, uid, premtime);
+		ShowPlayerDialog(playerid, D_STATS, DIALOG_STYLE_TABLIST, str, StrinG, "Wybierz", "Zamknij");
+	}
+	else
+	{
+	    new StrinG[2500];
+		format(StrinG, sizeof(StrinG), "{CCCCCC}Czas gry:\t{FFFFFF}%dh %02dmin\n{CCCCCC}Energia:\t{FFFFFF}%.0f%%\n{CCCCCC}BW:\t{FFFFFF}%d sek.\n{CCCCCC}Si³a:\t{FFFFFF}%dj\n{CCCCCC}Gotówka:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Bank:\t{00FF00}${FFFFFF}%d\n{CCCCCC}Numer konta:\t{FFFFFF}%d\n{CCCCCC}Drzwi:\t{FFFFFF}Brak (UID: %d)\n{CCCCCC}Skin:\t{FFFFFF}%d (domyœlny %d)\n{CCCCCC}Strefa:\t{FFFFFF}%s (UID: %d)\n{FFD700}Premium:\t{FFFFFF}%s",
+			online_hours, online_minutes, PlayerData[id][char_health], PlayerData[id][char_bw], PlayerData[id][char_strength], PlayerData[id][char_cash], PlayerData[id][char_bank], PlayerData[id][char_bank_number], PlayerData[id][char_inside_doors], GetPlayerSkin(id), PlayerData[id][char_skin], zname, uid, premtime);
+		ShowPlayerDialog(playerid, D_STATS, DIALOG_STYLE_TABLIST, str, StrinG, "Wybierz", "Zamknij");
+	}
+	return 1;
+}
+
 stock GetNearestPlayer(playerid, Float:dist)
 {
     new targetid = INVALID_PLAYER_ID;
@@ -2810,4 +2881,3 @@ stock GetNearestObject(playerid, Float:distance)
     }
     return retElement;
 }
-

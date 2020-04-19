@@ -231,23 +231,6 @@ CMD:opis(playerid, params[])
 	return 1;
 }
 
-CMD:stats(playerid, cmdtext[])
-{
-	new id;
-	if(sscanf(cmdtext, "i", id))
-	{
-	    ShowPlayerStats(playerid, playerid);
-	}
-	else
-	{
-	    if(!IsPlayerAdmin(playerid) && PlayerData[playerid][char_admin_level] < 3) return ShowPlayerStats(playerid, playerid);
-	    if(!IsPlayerConnected(id) || !PlayerData[id][char_logged]) return Tip(playerid, "Ten gracz nie jest po³¹czony.");
-
-		ShowPlayerStats(playerid, id);
-	}
-	return 1;
-}
-
 CMD:w(playerid, params[])
 {
     if(PlayerData[playerid][char_block_ooc] != 0)
